@@ -29,7 +29,7 @@ void teleopDrive::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void teleopDrive::Execute() {
-
+	Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetX(),Robot::oi->getdriveStick()->GetRawAxis(4));
 }
 
 // Make this return true when this Command no longer needs to run execute()

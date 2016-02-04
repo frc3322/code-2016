@@ -27,19 +27,19 @@ void RobotMap::init() {
 
     drivetraindriveSRX1.reset(new CANTalon(0));
     lw->AddActuator("Drivetrain", "driveSRX1", drivetraindriveSRX1);
-    
+
     drivetraindriveSRX2.reset(new CANTalon(1));
     lw->AddActuator("Drivetrain", "driveSRX2", drivetraindriveSRX2);
-    
+
     drivetraindriveSRX3.reset(new CANTalon(2));
     lw->AddActuator("Drivetrain", "driveSRX3", drivetraindriveSRX3);
-    
+
     drivetraindriveSRX4.reset(new CANTalon(3));
     lw->AddActuator("Drivetrain", "driveSRX4", drivetraindriveSRX4);
-    
+
     drivetraindriveTrain.reset(new RobotDrive(drivetraindriveSRX1, drivetraindriveSRX2,
               drivetraindriveSRX3, drivetraindriveSRX4));
-    
+
     drivetraindriveTrain->SetSafetyEnabled(true);
         drivetraindriveTrain->SetExpiration(0.1);
         drivetraindriveTrain->SetSensitivity(0.5);

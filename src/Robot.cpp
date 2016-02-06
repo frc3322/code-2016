@@ -29,7 +29,15 @@ void Robot::RobotInit() {
 	oi.reset(new OI());
 	driveTeleop.reset(new teleopDrive());
 	autonomousCommand.reset(new autonCommand());
-  }
+	try{
+		ahrs = new AHRS(SerialPort::kMXP);
+	}
+	catch (std::exception ex ) {
+		std::string err_string = "Error instantiating navX MXP:  ";
+		err_string += ex.what();
+		DriverStation::ReportError(err_string.c_str());
+	}
+}
 
 /**
  * This function is called when the disabled button is hit.

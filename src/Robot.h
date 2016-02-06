@@ -13,6 +13,7 @@
 #define _ROBOT_H
 
 #include "WPILib.h"
+#include "AHRS.h"
 #include "Commands/Command.h"
 #include "RobotMap.h"
 #include "LiveWindow/LiveWindow.h"
@@ -41,6 +42,9 @@ public:
 	virtual void TeleopInit();
 	virtual void TeleopPeriodic();
 	virtual void TestPeriodic();
+
+	//navx
+	AHRS *ahrs;
 
 	//command declarations
 	std::unique_ptr<Command> driveTeleop;

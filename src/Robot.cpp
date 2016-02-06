@@ -59,11 +59,14 @@ void Robot::TeleopInit() {
 	// these lines or comment it out.
 	if (autonomousCommand.get() != nullptr)
 		autonomousCommand->Cancel();
+	Robot::drivetrain->enableSRX();
+
 }
 
 void Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
-	driveTeleop->Start();
+	Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetRawAxis(4),Robot::oi->getdriveStick()->GetY());
+
 }
 
 void Robot::TestPeriodic() {

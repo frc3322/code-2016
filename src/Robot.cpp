@@ -35,21 +35,24 @@ void Robot::RobotInit() {
 	oi.reset(new OI());
 	driveTeleop.reset(new teleopDrive());
 	autonomousCommand.reset(new autonCommand());
-	try{
-		ahrs = new AHRS(SerialPort::kMXP);
-	}
-	catch (std::exception ex ) {
-		std::string err_string = "Error instantiating navX MXP:  ";
-		err_string += ex.what();
-		DriverStation::ReportError(err_string.c_str());
-	}
+	ahrs = RobotMap::ahrs;
+	SmartDashboard::PutNumber("front speed",0),SmartDashboard::PutNumber("rear speed",0),
+	SmartDashboard::PutNumber("front P",0),SmartDashboard::PutNumber("front I",0),SmartDashboard::PutNumber("front D",0),
+	SmartDashboard::PutNumber("rear P",0),SmartDashboard::PutNumber("rear I",0),SmartDashboard::PutNumber("rear D",0);
+	SmartDashboard::PutBoolean("testShooterPID",false);
+
+
+
 }
 
 /**
+ *
  * This function is called when the disabled button is hit.
  * You can use it to reset subsystems before shutting down.
  */
 void Robot::DisabledInit(){
+	Robot::drivetrain->EnableSRX();
+	Robot::shooter->initShooter();
 
 }
 
@@ -60,6 +63,9 @@ void Robot::DisabledPeriodic() {
 void Robot::AutonomousInit() {
 	if (autonomousCommand.get() != nullptr)
 		autonomousCommand->Start();
+	Robot::drivetrain->EnableSRX();
+	Robot::shooter->initShooter();
+
 }
 
 void Robot::AutonomousPeriodic() {
@@ -73,13 +79,53 @@ void Robot::TeleopInit() {
 	// these lines or comment it out.
 	if (autonomousCommand.get() != nullptr)
 		autonomousCommand->Cancel();
-	Robot::drivetrain->enableSRX();
+	Robot::drivetrain->EnableSRX();
+	Robot::shooter->initShooter();
+}
+
+void Robot::TestNavX(){
+	SmartDashboard::PutNumber("Angle", RobotMap::ahrs->GetAngle());
+	SmartDashboard::PutNumber("Altitude (meters)", RobotMap::ahrs->GetAltitude());
+	SmartDashboard::PutNumber("Compass Heading (degrees, 0-360)", RobotMap::ahrs->GetCompassHeading());
+	SmartDashboard::PutNumber("Pitch (x axis rotation, -180-180)", RobotMap::ahrs->GetPitch());
+	SmartDashboard::PutNumber("Rate (rate of z axis rotation, degrees/second)", RobotMap::ahrs->GetRate());
+	SmartDashboard::PutNumber("Temperature (degrees celcius)", RobotMap::ahrs->GetTempC());
+	SmartDashboard::PutNumber("Vel X (meters/second, not accurate)", RobotMap::ahrs->GetVelocityX());
+	SmartDashboard::PutNumber("Vel Y (meters/second, not accurate)", RobotMap::ahrs->GetVelocityY());
+	SmartDashboard::PutNumber("Vel Z (meters/second, not accurate)", RobotMap::ahrs->GetVelocityZ());
+	SmartDashboard::PutNumber("Yaw (z axis rotation,-180 to 180)",RobotMap::ahrs->GetYaw());
 
 }
 
 void Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
-	Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetRawAxis(4),Robot::oi->getdriveStick()->GetY());
+	//ahrs (NavX) testing.  Should be disabled / commented out during competitions to reduce overhead
+	Robot::TestNavX();
+
+	SmartDashboard::PutNumber("vel",Robot::shooter->returnVel());
+
+	SmartDashboard::PutNumber("amp",Robot::shooter->returnAmpVal());
+	SmartDashboard::PutNumber("volts",Robot::shooter->returnVoltVal());
+
+	Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetRawAxis(4),Robot::oi->getdriveStick()->GetY(),true);
+	if(Robot::oi->getdriveStick()->GetRawButton(7)){
+		Robot::shooter->shootRaw();
+	}
+	else{
+		Robot::shooter->stopShooter();
+	}
+
+	if(Robot::oi->getdriveStick()->GetRawButton(1)){
+		Robot::intake->takeBallIn();
+	}
+
+	//test function for the PID velocity control on the shooter.  Should also be disabled/commented out during competitions, and only used for testing purposes.
+	if(SmartDashboard::GetBoolean("testShooterPID",false)){
+		Robot::shooter->testPID(SmartDashboard::GetNumber("front speed",0),SmartDashboard::GetNumber("rear speed",0),
+								SmartDashboard::GetNumber("front P",0),SmartDashboard::GetNumber("front I",0),SmartDashboard::GetNumber("front D",0),
+								SmartDashboard::GetNumber("rear P",0),SmartDashboard::GetNumber("rear I",0),SmartDashboard::GetNumber("rear D",0));
+	}
+
 
 }
 

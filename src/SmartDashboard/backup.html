@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html  lang="en">
+<head>
+
+<meta charset="utf-8">
+	<title>3322 DriverStation</title>
+
+	<script src="Resources/d3/d3.js"></script>
+	<script src="Resources/jquery-2.1.3.min.js"></script>
+	<link href="Resources/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="Resources/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+	<script src="Resources/dist/js/bootstrap.min.js"></script>
+	<script src ="commands.js"></script>
+
+	<link type="text/css" rel="stylesheet" href="AkiUI_MainPageCSS.css"/>
+</head>
+<body class="UIPage">
+
+<!-- <script src="./config.js"></script> -->
+<script src="./networktables/networktables.js"></script>
+
+<script src="RobotSV.js"></script>
+
+<div class="MainDivide" id="leftSection">
+
+	<ul class="nav nav-tabs" role="tablist" id="camtab">
+		<li role="presentation" class="active"><a href="#frontcam-tab" aria-controls="frontcam-tab" role="tab" data-toggle="tab">Front</a></li>
+		<li role="presentation"><a href="#backcam-tab" aria-controls="frontcam-tab" role="tab" data-toggle="tab">Back</a></li>
+	</ul>
+	<!--
+	<div class="tab-content">
+		<div class="tab-pane active" id="frontcam-tab">
+			<img id="frontcam-offline" class="webcam-img" src="Resources/CamFeedOffline.png"></img>
+		</div>
+		<div class="tab-pane" id="backcam-tab">
+			<img id="backcam-offline" class="webcam-img" src="Resources/CamFeedOffline.png"></img>
+		</div>
+	</div>
+	-->
+	<img id="eaglelogo" width=100 height=100 src="Resources/3322-eagle.png" />
+
+</div>
+
+<div class="MainDivide" id="RobotDiagram">
+
+	<div class="AlloftheLevels BinButtons" id="AllofthemBins">
+		<input type="number" name="shooter" id="speed" step="0.1" max="1.0" min="-1.0"><br>
+		<button class="btn-primary" id="ForwardButton" onclick="NetworkTables.setValue('/SmartDashboard/talon1',0.3)">Forward</button>
+		<button class="btn-primary" id="StopButton" onclick="NetworkTables.setValue('/SmartDashboard/talon1',0)">Stop</button>
+		<button class="btn-primary" id="BackwardButton" onclick="NetworkTables.setValue('/SmartDashboard/talon1',-0.3)">Backward</button>
+	</div>
+
+	<div class="Robotimg">
+		<img id=dog src="Resources/arrowleftred_benji_par_01.svg.thumb.png"></img>
+		<img id=do src="Resources/arrowrightred_benji_pa_01.svg.thumb.png"></img>
+
+		<img id=robotsv src="Resources/uirobot.png"></img>
+		<img id=toteArm1 src="toteArm.png"></img>
+		<img id=toteArm2 src="toteArm.png"></img>
+		<img id=toteArm3 src="toteArm.png"></img>
+		<img id=toteArm4 src="toteArm.png"></img>
+		<img id=binArm src="binArm.png"></img>
+	</div>
+
+	<div class="AlloftheLevels ToteButtons" id="AllofthemTotes">
+		<button class="btn-primary" id="ToteButton6" onclick="NetworkTables.setValue('/SmartDashboard/toteTo',6)">Tote 6</button>
+		<button class="btn-primary" id="ToteButton5" onclick="NetworkTables.setValue('/SmartDashboard/toteTo',5)">Tote 5</button>
+		<button class="btn-primary" id="ToteButton4" onclick="NetworkTables.setValue('/SmartDashboard/toteTo',4)">Tote 4</button>
+		<button class="btn-primary" id="ToteButton3" onclick="NetworkTables.setValue('/SmartDashboard/toteTo',3)">Tote 3</button>
+		<button class="btn-primary" id="ToteButton2" onclick="NetworkTables.setValue('/SmartDashboard/toteTo',2)">Tote 2</button>
+		<button class="btn-primary" id="ToteButton1" onclick="NetworkTables.setValue('/SmartDashboard/toteTo',1)">Tote 1</button>
+		<button class="btn-primary" id="ToteButton0" onclick="NetworkTables.setValue('/SmartDashboard/toteTo',0)">Tote 0</button>
+	</div>
+</div>
+
+<div class="MainDivide" id="AutoBox">
+	<button class="btn-primary SpecialButtons" id="ReverserSwitch" onclick="toggleNt('/SmartDashboard/reverseRobot')">Reverse Controls</button>
+	<button class="btn-primary SpecialButtons" id="AutoLifterSwitch" onclick="toggleNt('/SmartDashboard/autoLift')">Auto Lifting</button>
+	<button class="btn-primary SpecialButtons" id="Slo-MoSwitch" onclick="toggleNt('/SmartDashboard/slowMo')">Slow-Mo</button>
+	<select id="AutoPathChoice">
+	</select>
+	<div>
+		<input type="checkbox" id="cooperate" onclick="toggleNt('/SmartDashboard/Three Tote Hot\\cooperate'); return false" />
+		Cooperate
+	</div>
+</div>
+
+<script type="text/javascript">
+"use strict";
+
+
+$(document).ready(function(){
+
+	$('#camtab').tab('show');
+
+	$("div.ToteLiftLevels button").click(function() {
+		$("div.ToteLiftLevels button").removeClass("buttonactive");
+		$(this).addClass("buttonactive");
+	});
+
+	$("div.BinsLiftLevels button").click(function() {
+		$("div.BinsLiftLevels button").removeClass("buttonactive");
+		$(this).addClass("buttonactive");
+	});
+
+	var	$autoSelector=$("#AutoPathChoice");
+	$autoSelector.change(function(event){
+		event.preventDefault();
+		//alert( $autoSelector.children(':selected').text());
+		var val=$autoSelector.find('option:selected').text();
+		//alert(val);
+		NetworkTables.setValue('/SmartDashboard/Autonomous Mode/selected', val);
+	});
+
+	// sets a function that will be called when the websocket connects/disconnects
+	NetworkTables.addWsConnectionListener(onNetworkTablesConnection, true);
+
+	// sets a function that will be called when the robot connects/disconnects
+	NetworkTables.addRobotConnectionListener(onRobotConnection, true);
+
+	// sets a function that will be called when any NetworkTables key/value changes
+	NetworkTables.addGlobalListener(onValueChanged, true);
+
+});
+
+function toggleNt(key) {
+	NetworkTables.setValue(key, !NetworkTables.getValue(key));
+}
+
+function updateChooser(id, key) {
+
+	var options = NetworkTables.getValue(key + '/options');
+	if (options === undefined)
+		return;
+
+	var optDefault = NetworkTables.getValue(key + '/default');
+	var selected = NetworkTables.getValue(key + '/selected');
+
+	var opt = d3.select(id)
+		.selectAll("option")
+		.data(options);
+
+	opt.enter()
+		.append("option");
+
+	opt.text(function(d,i){
+		return options[i];
+	});
+
+	opt.exit().remove();
+
+	if (selected !== undefined) {
+		$(id).val(selected);
+	} else if (optDefault !== undefined) {
+		$(id).val(optDefault);
+	}
+}
+
+
+
+// called when the robot connects/disconnects via networktables
+function onRobotConnection(connected) {
+
+	// TODO: change some indicator
+
+	console.log("Robot connected: " + connected);
+
+	// make sure the camera stream isn't connected until the robot connects to us
+	if (connected) {
+		$('#frontcam-offline').hide();
+		$('#backcam-offline').hide();
+
+		$('#frontcam-tab').prepend('<img class="webcam-img" id="frontcam-img" src="' + Config.frontcam + '/?action=stream" />');
+		$('#backcam-tab').prepend('<img class="webcam-img" id="backcam-img" src="' + Config.backcam + '/?action=stream" />');
+	} else {
+		$('#frontcam-img').remove();
+		$('#backcam-img').remove();
+
+		$('#frontcam-offline').show();
+		$('#backcam-offline').show();
+	}
+
+}
+
+// called when the websocket connects/disconnects
+function onNetworkTablesConnection(connected) {
+	// TODO: change some indicator
+}
+
+function onValueChanged(key, value, isNew) {
+
+	// key thing here: we're using the various NetworkTable keys as
+	// the id of the elements that we're appending, for simplicity. However,
+	// the key names aren't always valid HTML identifiers, so we use
+	// the NetworkTables.keyToId() function to convert them appropriately
+
+	//console.log(key, value);
+
+	switch (key) {
+		case "/SmartDashboard/Tote Forklift|Target Position":
+			$(".ToteButtons button").removeClass("buttonactive");
+
+			if (value != -1) {
+				$('#ToteButton' + value).addClass("buttonactive");
+			}
+			break;
+
+		case "/SmartDashboard/Can Forklift|Target Position":
+			$(".BinButtons button").removeClass("buttonactive");
+
+			if (value != -1) {
+				$('#BinButton' + value).addClass("buttonactive");
+			}
+
+			break;
+
+		case "/SmartDashboard/autoLift":
+			if (value)
+				$('#AutoLifterSwitch').addClass('buttonactive');
+			else
+				$('#AutoLifterSwitch').removeClass('buttonactive');
+			break;
+
+		case "/SmartDashboard/reverseRobot":
+			if (value)
+				$('#ReverserSwitch').addClass('buttonactive');
+			else
+				$('#ReverserSwitch').removeClass('buttonactive');
+			break;
+
+		case "/SmartDashboard/Three Tote Hot\\cooperate":
+			$('#cooperate').prop('checked', value);
+			break;
+
+		case "/SmartDashboard/Autonomous Mode/options":
+		case "/SmartDashboard/Autonomous Mode/default":
+		case "/SmartDashboard/Autonomous Mode/selected":
+			updateChooser('#AutoPathChoice', '/SmartDashboard/Autonomous Mode');
+			break;
+	}
+
+
+	// similarly, use keySelector to convert the key to a valid jQuery
+	// selector. This should work for class names also, not just for ids
+	$('#' + NetworkTables.keySelector(key)).text(value);
+}
+
+</script>
+
+</body>
+</html>

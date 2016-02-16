@@ -33,7 +33,6 @@ void Robot::RobotInit() {
 	// yet. Thus, their requires() statements may grab null pointers. Bad
 	// news. Don't move it.
 	oi.reset(new OI());
-	driveTeleop.reset(new teleopDrive());
 	autonomousCommand.reset(new autonCommand());
 	ahrs = RobotMap::ahrs;
 	SmartDashboard::PutNumber("front speed",0),SmartDashboard::PutNumber("rear speed",0),
@@ -112,12 +111,8 @@ void Robot::TeleopInit() {
 		autonomousCommand->Cancel();
 	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();
-<<<<<<< HEAD
 	autoShift();
 //	std::thread autoShiftthread(autoShift);
-=======
-	rotateCommand.release();
->>>>>>> origin/master
 }
 
 void Robot::TestNavX(){

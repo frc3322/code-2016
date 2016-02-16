@@ -24,12 +24,8 @@ private:
 	// It's desirable that everything possible is private except
 	// for methods that implement subsystem capabilities
 	std::shared_ptr<RobotDrive> driveTrain;
-<<<<<<< HEAD
-	std::shared_ptr<PowerDistributionPanel> powerDistPanel;
 	std::shared_ptr<DoubleSolenoid> gearshiftRight;
 	std::shared_ptr<DoubleSolenoid> gearshiftLeft;
-=======
->>>>>>> origin/master
 
 public:
 	Drivetrain();
@@ -44,19 +40,14 @@ public:
 	std::shared_ptr<CANTalon> driveSRX4;
 	std::shared_ptr<PowerDistributionPanel> powerDistPanel;
 	void EnableSRX();
-<<<<<<< HEAD
-	float RotateToAngle(float setpoint);
-	std::shared_ptr<PIDController> turnController;
+	PIDController *turnController;
 	PIDOutput *output;
 	int getVelocity(int currentGear);
-=======
 	float driveToAngle(float velocity, float setpoint);
     double rotateToAngleRate;
-    PIDController *turnController;      // PID Controller
     float setpoint;
     virtual void PIDWrite(float output);
 
->>>>>>> origin/master
 };
 
 #endif

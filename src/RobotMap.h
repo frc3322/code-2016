@@ -31,6 +31,8 @@ public:
 	static std::shared_ptr<CANTalon> drivetraindriveSRX4;
 	static std::shared_ptr<RobotDrive> drivetraindriveTrain;
 	static std::shared_ptr<PowerDistributionPanel> drivetrainpowerDistPanel;
+	static std::shared_ptr<DoubleSolenoid> drivetraingearshiftRight;
+	static std::shared_ptr<DoubleSolenoid> drivetraingearshiftLeft;
 	static std::shared_ptr<CANTalon> shootershooterTalon1;
 	static std::shared_ptr<Encoder> shooterfrontWheelEncoder;
 	static std::shared_ptr<PIDController> shooterfrontWheelPID;

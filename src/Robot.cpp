@@ -40,9 +40,7 @@ void Robot::RobotInit() {
 	SmartDashboard::PutNumber("front P",0),SmartDashboard::PutNumber("front I",0),SmartDashboard::PutNumber("front D",0),
 	SmartDashboard::PutNumber("rear P",0),SmartDashboard::PutNumber("rear I",0),SmartDashboard::PutNumber("rear D",0);
 	SmartDashboard::PutBoolean("testShooterPID",false);
-
-
-
+	currentGear=0;
 }
 
 /**
@@ -50,6 +48,7 @@ void Robot::RobotInit() {
  * This function is called when the disabled button is hit.
  * You can use it to reset subsystems before shutting down.
  */
+
 void Robot::DisabledInit(){
 	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();
@@ -72,6 +71,28 @@ void Robot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
 }
 
+void Robot::gearShift(int position) {
+	if (position == 0) {
+	RobotMap::drivetraingearshiftLeft->Set(DoubleSolenoid::kForward);
+	RobotMap::drivetraingearshiftRight->Set(DoubleSolenoid::kForward);
+	} else {
+	RobotMap::drivetraingearshiftLeft->Set(DoubleSolenoid::kReverse);
+	RobotMap::drivetraingearshiftRight->Set(DoubleSolenoid::kReverse);
+	}
+}
+void Robot::autoShift() {
+	while(true) {
+		maxSpeed = Robot::drivetrain->getVelocity(currentGear);
+		if (maxSpeed > shiftHigh && currentGear != 0) {
+			gearShift(0);
+			currentGear = 0;
+		} else if (maxSpeed < shiftLow && currentGear != 1) {
+			gearShift(1);
+			currentGear = 1;
+		}
+	}
+}
+
 void Robot::TeleopInit() {
 	// This makes sure that the autonomous stops running when
 	// teleop starts running. If you want the autonomous to
@@ -81,6 +102,8 @@ void Robot::TeleopInit() {
 		autonomousCommand->Cancel();
 	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();
+	autoShift();
+//	std::thread autoShiftthread(autoShift);
 }
 
 void Robot::TestNavX(){

@@ -69,6 +69,22 @@ void Robot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
 }
 
+int maxSpeed;
+int shiftHigh = 30;
+int shiftLow = 20; //shift values need testing, buffer in between to avoid toggling in the middle
+//shift into low gear, function not made
+int currentGear = 0; //0 = low, 1 = high
+void autoShift() {
+	maxSpeed = getVelocity();
+	if (maxSpeed > shiftHigh && currentGear != 1) {
+		//shift into high gear, function not made
+		currentGear = 1;
+	} else if (maxSpeed < shiftLow && currentGear != 0) {
+		//shift into low gear, function not made
+		currentGear = 0;
+	}
+}
+
 void Robot::TeleopInit() {
 	// This makes sure that the autonomous stops running when
 	// teleop starts running. If you want the autonomous to
@@ -78,6 +94,9 @@ void Robot::TeleopInit() {
 		autonomousCommand->Cancel();
 	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();
+
+	std::thread autoShiftthread(autoShift);
+	autoShift();
 }
 
 void Robot::TestNavX(){

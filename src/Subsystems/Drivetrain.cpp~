@@ -67,3 +67,16 @@ float Drivetrain::RotateToAngle(float setpoint){
 	return RobotMap::ahrs->GetAngle();
 
 }
+
+int getVelocity() {
+	int fastestSide;
+	int leftSide = Drivetrain::driveSRX1->GetEncVel();
+	int rightSide = Drivetrain::driveSRX2->GetEncVel();
+	int speedFactor = 4 * currentGear + 1; //assuming the gear ratio when in high is 5:1
+	if (leftSide >= rightSide) {
+		fastestSide = leftSide;
+	} else {
+		fastestSide = rightSide;
+	}
+	return fastestSide * speedFactor;
+}

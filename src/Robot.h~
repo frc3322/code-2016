@@ -28,6 +28,9 @@
 #include "Commands/teleopDrive.h"
 #include "OI.h"
 #include "xbox.h"
+#include <thread>
+#include <iostream>
+#include <DoubleSolenoid.h>
 
 class Robot : public IterativeRobot {
 public:

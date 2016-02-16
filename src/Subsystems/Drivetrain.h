@@ -29,6 +29,8 @@ private:
 	std::shared_ptr<CANTalon> driveSRX4;
 	std::shared_ptr<RobotDrive> driveTrain;
 	std::shared_ptr<PowerDistributionPanel> powerDistPanel;
+	std::shared_ptr<DoubleSolenoid> gearshiftRight;
+	std::shared_ptr<DoubleSolenoid> gearshiftLeft;
 
 public:
 	Drivetrain();
@@ -41,7 +43,7 @@ public:
 	float RotateToAngle(float setpoint);
 	std::shared_ptr<PIDController> turnController;
 	PIDOutput *output;
-
+	int getVelocity(int currentGear);
 };
 
 #endif

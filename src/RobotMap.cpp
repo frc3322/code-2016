@@ -20,6 +20,8 @@ std::shared_ptr<CANTalon> RobotMap::drivetraindriveSRX3;
 std::shared_ptr<CANTalon> RobotMap::drivetraindriveSRX4;
 std::shared_ptr<RobotDrive> RobotMap::drivetraindriveTrain;
 std::shared_ptr<PowerDistributionPanel> RobotMap::drivetrainpowerDistPanel;
+std::shared_ptr<DoubleSolenoid> RobotMap::drivetraingearshiftRight;
+std::shared_ptr<DoubleSolenoid> RobotMap::drivetraingearshiftLeft;
 std::shared_ptr<CANTalon> RobotMap::shootershooterTalon1;
 std::shared_ptr<Encoder> RobotMap::shooterfrontWheelEncoder;
 std::shared_ptr<PIDController> RobotMap::shooterfrontWheelPID;
@@ -62,6 +64,12 @@ void RobotMap::init() {
         drivetraindriveTrain->SetInvertedMotor(RobotDrive::kRearLeftMotor, true);
     drivetrainpowerDistPanel.reset(new PowerDistributionPanel(20));
     lw->AddSensor("Drivetrain", "powerDistPanel", drivetrainpowerDistPanel);
+    
+    drivetraingearshiftRight.reset(new DoubleSolenoid(0, 0, 1));
+    lw->AddActuator("Drivetrain", "gearshiftRight", drivetraingearshiftRight);
+    
+    drivetraingearshiftLeft.reset(new DoubleSolenoid(0, 2, 3));
+    lw->AddActuator("Drivetrain", "gearshiftLeft", drivetraingearshiftLeft);
     
     shootershooterTalon1.reset(new CANTalon(4));
     lw->AddActuator("Shooter", "shooterTalon1", shootershooterTalon1);

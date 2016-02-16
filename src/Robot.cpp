@@ -33,15 +33,19 @@ void Robot::RobotInit() {
 	// yet. Thus, their requires() statements may grab null pointers. Bad
 	// news. Don't move it.
 	oi.reset(new OI());
-	driveTeleop.reset(new teleopDrive());
 	autonomousCommand.reset(new autonCommand());
 	ahrs = RobotMap::ahrs;
+
 	SmartDashboard::PutNumber("front speed",0),SmartDashboard::PutNumber("rear speed",0),
 	SmartDashboard::PutNumber("front P",0),SmartDashboard::PutNumber("front I",0),SmartDashboard::PutNumber("front D",0),
 	SmartDashboard::PutNumber("rear P",0),SmartDashboard::PutNumber("rear I",0),SmartDashboard::PutNumber("rear D",0);
 	SmartDashboard::PutBoolean("testShooterPID",false);
 
+	SmartDashboard::PutNumber("Auton Number: ",0);
 
+	//Talon SRX 15 mode bug
+	Robot::drivetrain->EnableSRX();
+	Robot::shooter->initShooter();
 
 }
 
@@ -64,12 +68,15 @@ void Robot::AutonomousInit() {
 	if (autonomousCommand.get() != nullptr)
 		autonomousCommand->Start();
 	Robot::drivetrain->EnableSRX();
+	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();
-
 }
 
 void Robot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
+	Robot::TestNavX();
+
+
 }
 
 void Robot::TeleopInit() {
@@ -81,6 +88,7 @@ void Robot::TeleopInit() {
 		autonomousCommand->Cancel();
 	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();
+	rotateCommand.release();
 }
 
 void Robot::TestNavX(){
@@ -99,6 +107,7 @@ void Robot::TestNavX(){
 
 void Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
+
 	//ahrs (NavX) testing.  Should be disabled / commented out during competitions to reduce overhead
 	Robot::TestNavX();
 
@@ -107,7 +116,7 @@ void Robot::TeleopPeriodic() {
 	SmartDashboard::PutNumber("amp",Robot::shooter->returnAmpVal());
 	SmartDashboard::PutNumber("volts",Robot::shooter->returnVoltVal());
 
-	Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetRawAxis(4),Robot::oi->getdriveStick()->GetY(),true);
+	Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetRawAxis(4),-1*Robot::oi->getdriveStick()->GetY(),true);
 	if(Robot::oi->getdriveStick()->GetRawButton(7)){
 		Robot::shooter->shootRaw();
 	}

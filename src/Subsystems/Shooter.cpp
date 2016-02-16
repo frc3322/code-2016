@@ -72,7 +72,11 @@ float Shooter::returnVoltVal(){
 float Shooter::returnAmpVal(){
 	return shooterFrontTalon->GetOutputCurrent();
 }
-
+void Shooter::shootAuton3(){
+	shooterFrontTalon->SelectProfileSlot(1);
+	shooterFrontTalon->SetControlMode(CANTalon::ControlMode::kSpeed);
+	shooterFrontTalon->Set(1235);
+}
 
 // Put methods for controlling this subsystem
 // here. Call these from Commands.

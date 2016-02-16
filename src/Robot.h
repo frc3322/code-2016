@@ -54,5 +54,7 @@ public:
 	std::unique_ptr<Command> driveTeleop;
 
 	std::shared_ptr<AHRS> ahrs;
+
+	int setpoint = 0;
 };
 #endif

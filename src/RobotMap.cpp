@@ -54,7 +54,7 @@ void RobotMap::init() {
     drivetraindriveTrain.reset(new RobotDrive(drivetraindriveSRX1, drivetraindriveSRX2,
               drivetraindriveSRX3, drivetraindriveSRX4));
     
-    drivetraindriveTrain->SetSafetyEnabled(true);
+    drivetraindriveTrain->SetSafetyEnabled(false);
         drivetraindriveTrain->SetExpiration(0.1);
         drivetraindriveTrain->SetSensitivity(0.5);
         drivetraindriveTrain->SetMaxOutput(1.0);

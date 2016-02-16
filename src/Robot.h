@@ -60,10 +60,14 @@ public:
 
 	std::shared_ptr<AHRS> ahrs;
 
+<<<<<<< HEAD
 	int maxSpeed;
 	int shiftHigh = 3693;
 	int shiftLow = 1617; //shift values need testing, buffer in between to avoid toggling in the middle
 	//shift into low gear, function not made
 	int currentGear; //0 = low, 1 = high
+=======
+	int setpoint = 0;
+>>>>>>> origin/master
 };
 #endif

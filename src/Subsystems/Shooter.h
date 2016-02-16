@@ -40,6 +40,7 @@ public:
 	int returnVel();
 	float returnVoltVal();
 	float returnAmpVal();
+	void shootAuton3();
 };
 
 #endif

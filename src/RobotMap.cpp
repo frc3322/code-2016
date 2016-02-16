@@ -42,21 +42,21 @@ void RobotMap::init() {
     LiveWindow *lw = LiveWindow::GetInstance();
 
     drivetraindriveSRX1.reset(new CANTalon(0));
-    lw->AddActuator("Drivetrain", "driveSRX1", drivetraindriveSRX1);
+    lw->AddActuator("Drivetrain", "talon0", drivetraindriveSRX1);	// Drive motor upper-left
     
     drivetraindriveSRX2.reset(new CANTalon(1));
-    lw->AddActuator("Drivetrain", "driveSRX2", drivetraindriveSRX2);
+    lw->AddActuator("Drivetrain", "talon1", drivetraindriveSRX2);	// Drive motor upper-right
     
     drivetraindriveSRX3.reset(new CANTalon(2));
-    lw->AddActuator("Drivetrain", "driveSRX3", drivetraindriveSRX3);
+    lw->AddActuator("Drivetrain", "talon2", drivetraindriveSRX3);	// Drive motor lower-left
     
     drivetraindriveSRX4.reset(new CANTalon(3));
-    lw->AddActuator("Drivetrain", "driveSRX4", drivetraindriveSRX4);
+    lw->AddActuator("Drivetrain", "talon3", drivetraindriveSRX4);	// Drive motor loer-right
     
     drivetraindriveTrain.reset(new RobotDrive(drivetraindriveSRX1, drivetraindriveSRX2,
               drivetraindriveSRX3, drivetraindriveSRX4));
     
-    drivetraindriveTrain->SetSafetyEnabled(true);
+    drivetraindriveTrain->SetSafetyEnabled(false);
         drivetraindriveTrain->SetExpiration(0.1);
         drivetraindriveTrain->SetSensitivity(0.5);
         drivetraindriveTrain->SetMaxOutput(1.0);
@@ -72,7 +72,7 @@ void RobotMap::init() {
     lw->AddActuator("Drivetrain", "gearshiftLeft", drivetraingearshiftLeft);
     
     shootershooterTalon1.reset(new CANTalon(4));
-    lw->AddActuator("Shooter", "shooterTalon1", shootershooterTalon1);
+    lw->AddActuator("Shooter", "talon4", shootershooterTalon1);	// Shooting motor front
     
     shooterfrontWheelEncoder.reset(new Encoder(0, 1, false, Encoder::k4X));
     lw->AddSensor("Shooter", "frontWheelEncoder", shooterfrontWheelEncoder);
@@ -83,7 +83,7 @@ void RobotMap::init() {
     shooterfrontWheelPID->SetContinuous(false); shooterfrontWheelPID->SetAbsoluteTolerance(0.2); 
         shooterfrontWheelPID->SetOutputRange(-1.0, 1.0);
     shootershooterTalon2.reset(new CANTalon(5));
-    lw->AddActuator("Shooter", "shooterTalon2", shootershooterTalon2);
+    lw->AddActuator("Shooter", "talon5", shootershooterTalon2);	// Shooting motor back
     
     shooterbackWheelEncoder.reset(new Encoder(2, 3, false, Encoder::k4X));
     lw->AddSensor("Shooter", "backWheelEncoder", shooterbackWheelEncoder);
@@ -94,16 +94,16 @@ void RobotMap::init() {
     shooterbackWheelPID->SetContinuous(false); shooterbackWheelPID->SetAbsoluteTolerance(0.2); 
         shooterbackWheelPID->SetOutputRange(-1.0, 1.0);
     intakeintakeSpinTalon1.reset(new CANTalon(6));
-    lw->AddActuator("Intake", "intakeSpinTalon1", intakeintakeSpinTalon1);
+    lw->AddActuator("Intake", "talon6", intakeintakeSpinTalon1);	// Intake front-left
     
     intakeintakeSpinTalon2.reset(new CANTalon(7));
-    lw->AddActuator("Intake", "intakeSpinTalon2", intakeintakeSpinTalon2);
+    lw->AddActuator("Intake", "talon7", intakeintakeSpinTalon2);	// Intake back-left
     
     intakeintakeRotateTalon1.reset(new CANTalon(8));
-    lw->AddActuator("Intake", "intakeRotateTalon1", intakeintakeRotateTalon1);
+    lw->AddActuator("Intake", "talon8", intakeintakeRotateTalon1);	// Intake front-right
     
     intakeintakeRotateTalon2.reset(new CANTalon(9));
-    lw->AddActuator("Intake", "intakeRotateTalon2", intakeintakeRotateTalon2);
+    lw->AddActuator("Intake", "talon9", intakeintakeRotateTalon2);	// Intake back-left
     
 
 

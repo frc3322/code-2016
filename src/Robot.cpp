@@ -103,6 +103,52 @@ void Robot::autoShift() {
 	}
 }
 
+void gathererMove(int target) {
+	int move_high = 410;
+	int move_low = 102; //target values can be set as desired
+	int move_target;
+	int kP = .3;
+	int kI = 10;
+	int kD = 10; //constant values need tuning
+	int decay = .5;
+	int currentPosition;
+	int error;
+	int p_term = 0;
+	int i_term = 0;
+	int d_term = 0;
+	int last_error = 0;
+	int speed;
+	int reached_count = 0;
+
+	if (target == 0) {
+		move_target = move_low;
+	} else {
+		move_target = move_high;
+	}
+	while(reached_count < 10) {
+		currentPosition = Drivetrain::driveSRX1->GetEncPosition(); //change to Talon on gatherer
+		error = move_target - currentPosition;
+		p_term = error * kP;
+		i_term = i_term * decay + error * kI;
+		d_term = (error - last_error) * kD;
+		speed = p_term + i_term + d_term;
+		//set motor to speed
+		if (abs(error) < 10) {
+			reached_count++;
+		} else {
+			reached_count = 0;
+		}
+		last_error = error;
+	}
+	//stop motor
+}
+
+void Robot::checkGatherer() {
+	if (button_pressed) {
+		gathererMove(button_id) //0 = low, 1 = high
+	}
+}
+
 void Robot::TeleopInit() {
 	// This makes sure that the autonomous stops running when
 	// teleop starts running. If you want the autonomous to

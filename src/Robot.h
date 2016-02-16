@@ -53,6 +53,7 @@ public:
 	virtual void TestNavX();
 	void autoShift();
 	void gearShift(int position);
+	void checkGatherer();
 
 	//command declarations
 	std::unique_ptr<Command> driveTeleop;

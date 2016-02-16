@@ -39,6 +39,7 @@ void Robot::RobotInit() {
 	SmartDashboard::PutNumber("front P",0),SmartDashboard::PutNumber("front I",0),SmartDashboard::PutNumber("front D",0),
 	SmartDashboard::PutNumber("rear P",0),SmartDashboard::PutNumber("rear I",0),SmartDashboard::PutNumber("rear D",0);
 	SmartDashboard::PutBoolean("testShooterPID",false);
+	gearShift(0);
 	currentGear=0;
 
 	SmartDashboard::PutNumber("Auton Number: ",0);

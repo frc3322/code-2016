@@ -138,14 +138,19 @@ void gathererMove(int target) {
 		} else {
 			reached_count = 0;
 		}
+		if (limitSwitch()) { //needs to have function for limit switch
+			reached_count = 10;
+		}
 		last_error = error;
 	}
 	//stop motor
 }
 
 void Robot::checkGatherer() {
-	if (button_pressed) {
-		gathererMove(button_id) //0 = low, 1 = high
+	while () {
+		if (gathererButtons()) { //needs to have function for gatherer buttons
+			gathererMove(button_id) //0 = low, 1 = high
+		}
 	}
 }
 

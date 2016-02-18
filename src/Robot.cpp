@@ -91,7 +91,6 @@ void Robot::gearShift(int position) {
 	}
 }
 void Robot::autoShift() {
-	while(true) {
 		maxSpeed = Robot::drivetrain->getVelocity(currentGear);
 		if (maxSpeed > shiftHigh && currentGear != 0) {
 			gearShift(0);
@@ -100,7 +99,6 @@ void Robot::autoShift() {
 			gearShift(1);
 			currentGear = 1;
 		}
-	}
 }
 
 void gathererMove(int target) {

@@ -47,6 +47,10 @@ public:
     double rotateToAngleRate;
     float setpoint;
     virtual void PIDWrite(float output);
+	constexpr static double kP = 0.03f;
+	constexpr static double kI = 0.00f;
+	constexpr static double kD = 0.00f;
+	constexpr static double kF = 0.00f;
 
 };
 

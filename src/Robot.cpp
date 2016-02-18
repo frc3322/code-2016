@@ -126,7 +126,7 @@ void gathererMove(int target) {
 		move_target = move_high;
 	}
 	while(reached_count < 10) {
-		currentPosition = Drivetrain::driveSRX1->GetEncPosition(); //change to Talon on gatherer
+//		currentPosition = Drivetrain::driveSRX1->GetEncPosition(); //change to Talon on gatherer
 		error = move_target - currentPosition;
 		p_term = error * kP;
 		i_term = i_term * decay + error * kI;
@@ -138,19 +138,19 @@ void gathererMove(int target) {
 		} else {
 			reached_count = 0;
 		}
-		if (limitSwitch()) { //needs to have function for limit switch
-			reached_count = 10;
-		}
+//		if (limitSwitch()) { //needs to have function for limit switch
+//			reached_count = 10;
+//		}
 		last_error = error;
 	}
 	//stop motor
 }
 
 void Robot::checkGatherer() {
-	while () {
-		if (gathererButtons()) { //needs to have function for gatherer buttons
-			gathererMove(button_id) //0 = low, 1 = high
-		}
+	while (true) {
+//		if (gathererButtons()) { //needs to have function for gatherer buttons
+//			gathererMove(button_id) //0 = low, 1 = high
+//		}
 	}
 }
 

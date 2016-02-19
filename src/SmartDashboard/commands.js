@@ -1,5 +1,28 @@
 $(document).ready(function() {
 
+function getConnection()
+{
+	document.getElementById("connection").style.fontSize = "24px"
+	var v = NetworkTables.isRobotConnected()
+	if (v)
+		document.getElementById("connection").style.color = "green"
+	else
+		document.getElementById("connection").style.color = "red"
+	$('#connection').val((v ? "CONNECTED" : "NOT CONNECTED"))
+}
+
+function getGear()
+{
+	document.getElementById("robot-gear").style.fontSize = "24px"
+	var v = NetworkTables.getValue('/SmartDashboard/highGear', false)
+	
+	if (v)
+		document.getElementById("robot-gear").style.color = "green"
+	else
+		document.getElementById("robot-gear").style.color = "red"
+	$('#robot-gear').val((v ? "HIGH GEAR" : "LOW GEAR"))
+}
+
 function getSpeed()
 {
 	var left = NetworkTables.getValue('/SmartDashboard/talon0', 0.0)
@@ -45,6 +68,8 @@ function getShootSpeed()
 }
 
 setInterval(function() {
+	getConnection();
+	getGear();
 	getSpeed();
 	getDirection();
 	getLoadSpeed();

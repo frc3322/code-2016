@@ -51,7 +51,7 @@
 	</div>
 	<div>
 		<span class="font-eagle">Direction </span>
-		<input type="text" name="robot-direction" id="direction" step="0" max="1.0" min="-1.0"/> <br/>
+		<input type="text" name="robot-direction" id="direction"/> <br/>
 	</div>
 	<br/><br/>
 	<div>
@@ -66,13 +66,10 @@
 
 <div class="MainDivide" id="AutoBox">
 
-	<div class="robot-status">
-		<script>
-			document.write(NetworkTables.isRobotConnected())
-		</script>
-	</div>
+	<input type="text" name="robot-connection" id="connection"/><br/>
+	<input type="text" name="robot-gear" id="robot-gear"/><br/>
 </div>
-
+<!--
 <script type="text/javascript">
 "use strict";
 
@@ -234,6 +231,6 @@ function onValueChanged(key, value, isNew) {
 }
 
 </script>
-
+-->
 </body>
 </html>

@@ -28,17 +28,31 @@ input::-webkit-inner-spin-button {
 	color: #FFF;
 	text-align: center;
 	font-family: Impact, Sans;
-	font-size: 32px;
+	font-size: 24px;
 }
 
 #speed,
 #direction,
 #load-speed,
 #shoot-speed {
+	border-color: rgba(0,0,0,0);
 	float: right;
 	background-color: #000;
 	color: #3ECCFB;
 	width: 240px;
 	font-family: Courier New, Monospace;
 	font-size: 16px;
+}
+
+#connection,
+#robot-gear {
+	border-color: rgba(255,0,0,0);
+	background-color:rgba(255,0,0,0);
+	float: right;
+	color: #3ECCFB;
+	width: 220px;
+	font-family: Courier New, Monospace;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
 }

@@ -47,10 +47,22 @@ public:
     double rotateToAngleRate;
     float setpoint;
     virtual void PIDWrite(float output);
+	void gearShift(int position);
+	void autoShift();
+
 	constexpr static double kP = 0.03f;
 	constexpr static double kI = 0.00f;
 	constexpr static double kD = 0.00f;
 	constexpr static double kF = 0.00f;
+
+	int maxSpeed;
+	int shiftHigh = 3693;
+	int shiftLow = 1617; //shift values need testing, buffer in between to avoid toggling in the middle
+	//shift into low gear, function not made
+	int currentGear = 0; //0 = low, 1 = high
+
+
+
 
 };
 

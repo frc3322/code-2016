@@ -55,16 +55,8 @@ public:
 	void gearShift(int position);
 	void checkGatherer();
 
-	//command declarations
-	std::unique_ptr<Command> driveTeleop;
-
 	std::shared_ptr<AHRS> ahrs;
 
-	int maxSpeed;
-	int shiftHigh = 3693;
-	int shiftLow = 1617; //shift values need testing, buffer in between to avoid toggling in the middle
-	//shift into low gear, function not made
-	int currentGear; //0 = low, 1 = high
 	int setpoint = 0;
 };
 #endif

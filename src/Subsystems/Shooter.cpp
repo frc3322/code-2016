@@ -42,7 +42,7 @@ void Shooter::shootRaw(){
 	shooterBackTalon->Set(-.8);
 	shooterFrontTalon->Set(-.9);
 }
-void Shooter::testPID(float setpointFront, float setpointRear, double pF, double iF, double dF, double pR, double iR, double dR){
+void Shooter::testPID(float setpointFront){
 //	frontWheelPID->SetPID(pF,iF,dF);
 //	backWheelPID->SetPID(pF,iF,dF);
 //	frontWheelPID->SetSetpoint(setpointFront);
@@ -50,9 +50,12 @@ void Shooter::testPID(float setpointFront, float setpointRear, double pF, double
 //	shooterFrontTalon->SetP(pF);
 //	shooterFrontTalon->SetP(iF);
 //	shooterFrontTalon->SetP(dF);
+	shooterBackTalon->SetControlMode(CANTalon::ControlMode::kFollower);
+	shooterBackTalon->Set(10);
 	shooterFrontTalon->SelectProfileSlot(0);
+	shooterFrontTalon->SetSensorDirection(true);
 	shooterFrontTalon->SetControlMode(CANTalon::ControlMode::kSpeed);
-	shooterFrontTalon->Set(500);
+	shooterFrontTalon->Set(46000);
 }
 void Shooter::stopShooter(){
 	shooterBackTalon->Set(0);
@@ -75,7 +78,7 @@ float Shooter::returnAmpVal(){
 void Shooter::shootAuton3(){
 	shooterFrontTalon->SelectProfileSlot(1);
 	shooterFrontTalon->SetControlMode(CANTalon::ControlMode::kSpeed);
-	shooterFrontTalon->Set(1235);
+	shooterFrontTalon->Set(46000);
 }
 
 // Put methods for controlling this subsystem

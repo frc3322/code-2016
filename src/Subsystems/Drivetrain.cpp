@@ -103,3 +103,23 @@ int Drivetrain::getVelocity(int currentGear) { //should output rpm of fastest mo
 	}
 	return fastestSide / encClicksRev / speedFactor;
 }
+
+void Drivetrain::gearShift(int position) {
+	if (position == 0) {
+	RobotMap::drivetraingearshiftLeft->Set(DoubleSolenoid::kForward);
+	RobotMap::drivetraingearshiftRight->Set(DoubleSolenoid::kForward);
+	} else {
+	RobotMap::drivetraingearshiftLeft->Set(DoubleSolenoid::kReverse);
+	RobotMap::drivetraingearshiftRight->Set(DoubleSolenoid::kReverse);
+	}
+}
+void Drivetrain::autoShift() {
+		maxSpeed = getVelocity(currentGear);
+		if (maxSpeed > shiftHigh && currentGear != 0) {
+			gearShift(0);
+			currentGear = 0;
+		} else if (maxSpeed < shiftLow && currentGear != 1) {
+			gearShift(1);
+			currentGear = 1;
+		}
+}

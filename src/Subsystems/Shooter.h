@@ -36,7 +36,7 @@ public:
 	void shootRaw();
 	void initShooter();
 	void stopShooter();
-	void testPID(float setpointFront, float setpointRear, double pF, double iF, double dF, double pR, double iR, double dR);
+	void testPID(float setpointFront);
 	int returnVel();
 	float returnVoltVal();
 	float returnAmpVal();

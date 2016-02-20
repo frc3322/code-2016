@@ -1,15 +1,5 @@
 $(document).ready(function() {
 
-function getConnection()
-{
-	document.getElementById("connection").style.fontSize = "24px"
-	var v = NetworkTables.isRobotConnected()
-	if (v)
-		document.getElementById("connection").style.color = "green"
-	else
-		document.getElementById("connection").style.color = "red"
-	$('#connection').val((v ? "CONNECTED" : "NOT CONNECTED"))
-}
 
 function getGear()
 {
@@ -68,7 +58,6 @@ function getShootSpeed()
 }
 
 setInterval(function() {
-	getConnection();
 	getGear();
 	getSpeed();
 	getDirection();

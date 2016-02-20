@@ -26,8 +26,7 @@ class ConfigHandler(tornado.web.RequestHandler):
     
     def get(self):
         self.write('var Config = ' + json.dumps({
-            'frontcam': options.frontcam,
-            'backcam': options.backcam
+            'webcam': options.webcam
         }) + ';')
         
 
@@ -42,8 +41,7 @@ def init_networktables(ipaddr):
 
 
 def main():
-    define("frontcam", default="http://10.14.18.2:5800", help="URL for the front camera", type=str)
-    define("backcam", default="http://10.14.18.2:5801", help="URL for the back camera", type=str)
+    define("webcam", default="http://10.14.18.2:1180", help="URL for the webcam", type=str)
     define("host", default='127.0.0.1', help="Hostname of robot", type=str)
     define("port", default=3322, help="run on the given port", type=int)
 

@@ -68,8 +68,26 @@
 
 	<input type="text" name="robot-connection" id="connection"/><br/>
 	<input type="text" name="robot-gear" id="robot-gear"/><br/>
+<<<<<<< HEAD
+=======
+	<script>
+		document.getElementById("connection").style.fontSize = "24px"
+		var v = NetworkTables.isRobotConnected()
+		if (v)
+		{
+			document.getElementById("connection").style.color = "green"
+			document.getElementById("webcam").src = Config.webcam + "/?action=stream"
+		}
+		else
+		{
+			document.getElementById("connection").style.color = "red"
+			document.getElementById("webcam").src = "Resources/CamFeedOffline.png"
+		}
+		$('#connection').val((v ? "CONNECTED" : "NOT CONNECTED"))
+	</script>
+>>>>>>> 2e1ed47fea37d246ae26df3cfae5b07997a9a29e
 </div>
-
+<!--
 <script type="text/javascript">
 "use strict";
 
@@ -226,6 +244,6 @@ function onValueChanged(key, value, isNew) {
 }
 
 </script>
-
+-->
 </body>
 </html>

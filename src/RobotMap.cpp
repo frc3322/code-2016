@@ -81,7 +81,7 @@ void RobotMap::init() {
     shooterfrontWheelPID.reset(new PIDController(1.0, 0.0, 0.0,/* F: 0.0, */ shooterfrontWheelEncoder.get(), shootershooterTalon1.get(), 0.02));
     lw->AddActuator("Shooter", "frontWheelPID", shooterfrontWheelPID);
     shooterfrontWheelPID->SetContinuous(false); shooterfrontWheelPID->SetAbsoluteTolerance(0.2); 
-        shooterfrontWheelPID->SetOutputRange(-1.0, 1.0);
+//        shooterfrontWheelPID->SetOutputRange(-1.0, 1.0);
     shootershooterTalon2.reset(new CANTalon(5));
     lw->AddActuator("Shooter", "talon5", shootershooterTalon2);	// Shooting motor back
     

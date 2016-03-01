@@ -41,8 +41,13 @@ def init_networktables(ipaddr):
 
 
 def main():
+<<<<<<< HEAD:src/SmartDashboard/initialize.py
     define("webcam", default="http://raspberrypi.local:8080/?action=stream", help="URL for the webcam", type=str)
     define("host", default='roborio-3322-frc.local', help="Hostname of robot", type=str)
+=======
+    define("webcam", default="http://10.14.18.2:1180", help="URL for the webcam", type=str)
+    define("host", default='127.0.0.1', help="Hostname of robot", type=str)
+>>>>>>> 2e1ed47fea37d246ae26df3cfae5b07997a9a29e:src/SmartDashboard/initialize.py
     define("port", default=3322, help="run on the given port", type=int)
 
     parse_command_line()

@@ -56,9 +56,24 @@ public:
 	void autoShift();
 	void gearShift(int position);
 	void checkGatherer();
+	void resetIntake();
+	void toggleIntakeOff();
+	void resetShoot();
+	CameraServer returnCam();
 
 	std::shared_ptr<AHRS> ahrs;
-
+	bool isFirstGather = true;
 	int setpoint = 0;
+	bool prevLBumperState;
+
+	double cycleStartTime;
+
+	bool grabbingBall;
+	bool holdingBall;
+	bool loadingBall;
+	bool secondaryHold;
+
+	double loadStartTime;
+
 };
 #endif

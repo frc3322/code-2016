@@ -39,10 +39,6 @@ void Robot::RobotInit() {
 	oi.reset(new OI());
 	autonomousCommand.reset(new autonCommand());
 	ahrs = RobotMap::ahrs;
-	SmartDashboard::PutNumber("front speed",0),SmartDashboard::PutNumber("rear speed",0),
-	SmartDashboard::PutNumber("front P",0),SmartDashboard::PutNumber("front I",0),SmartDashboard::PutNumber("front D",0),
-	SmartDashboard::PutNumber("rear P",0),SmartDashboard::PutNumber("rear I",0),SmartDashboard::PutNumber("rear D",0);
-	SmartDashboard::PutBoolean("testShooterPID",false);
 	Robot::drivetrain->gearShift(0);
 	Robot::drivetrain->currentGear=0;
 
@@ -52,8 +48,8 @@ void Robot::RobotInit() {
 	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();
 	Robot::intake->init();
-
-
+	RobotMap::ahrs->ZeroYaw();
+	CameraServer::GetInstance()->StartAutomaticCapture("cam0");
 }
 
 /**
@@ -65,19 +61,34 @@ void Robot::RobotInit() {
 void Robot::DisabledInit(){
 	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();
-
 }
 
 void Robot::DisabledPeriodic() {
 	Scheduler::GetInstance()->Run();
+	SmartDashboard::PutNumber("encoder dist",RobotMap::intakeEncoder->GetDistance());
+	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::ABUTTON)){
+		RobotMap::intakeEncoder->Reset();
+	}
+	Robot::TestNavX();
+	SmartDashboard::PutNumber("ticks ",Robot::shooter->shooterFrontTalon->GetEncPosition());
+
 }
 
 void Robot::AutonomousInit() {
-	if (autonomousCommand.get() != nullptr)
-		autonomousCommand->Start();
-	Robot::drivetrain->EnableSRX();
 	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();
+	Robot::intake->init();
+	Robot::drivetrain->autoShift();
+//	std::thread autoShiftthread(autoShift);
+	prevRBumperState = false;
+	prevLBumperState = false;
+	Robot::toggleIntakeOff();
+	RobotMap::intakeEncoder->Reset();
+	SmartDashboard::PutNumber("thing happened! ",0);
+	Robot::ahrs->ZeroYaw();
+	if (autonomousCommand.get() != nullptr)
+		autonomousCommand->Start();
+
 }
 
 void Robot::AutonomousPeriodic() {
@@ -85,57 +96,6 @@ void Robot::AutonomousPeriodic() {
 	Robot::TestNavX();
 
 
-}
-
-void gathererMove(int target) {
-	int move_high = 410;
-	int move_low = 102; //target values can be set as desired
-	int move_target;
-	int kP = .3;
-	int kI = 10;
-	int kD = 10; //constant values need tuning
-	int decay = .5;
-	int currentPosition;
-	int error;
-	int p_term = 0;
-	int i_term = 0;
-	int d_term = 0;
-	int last_error = 0;
-	int speed;
-	int reached_count = 0;
-
-	if (target == 0) {
-		move_target = move_low;
-	} else {
-		move_target = move_high;
-	}
-	while(reached_count < 10) {
-//		currentPosition = Drivetrain::driveSRX1->GetEncPosition(); //change to Talon on gatherer
-		error = move_target - currentPosition;
-		p_term = error * kP;
-		i_term = i_term * decay + error * kI;
-		d_term = (error - last_error) * kD;
-		speed = p_term + i_term + d_term;
-		//set motor to speed
-		if (abs(error) < 10) {
-			reached_count++;
-		} else {
-			reached_count = 0;
-		}
-//		if (limitSwitch()) { //needs to have function for limit switch
-//			reached_count = 10;
-//		}
-		last_error = error;
-	}
-	//stop motor
-}
-
-void Robot::checkGatherer() {
-	while (true) {
-//		if (gathererButtons()) { //needs to have function for gatherer buttons
-//			gathererMove(button_id) //0 = low, 1 = high
-//		}
-	}
 }
 
 void Robot::TeleopInit() {
@@ -151,30 +111,36 @@ void Robot::TeleopInit() {
 	Robot::drivetrain->autoShift();
 //	std::thread autoShiftthread(autoShift);
 	prevRBumperState = false;
+	prevLBumperState = false;
+	Robot::toggleIntakeOff();
+	RobotMap::intakeEncoder->Reset();
+	SmartDashboard::PutNumber("thing happened! ",0);
+	Robot::ahrs->ZeroYaw();
 }
 
 void Robot::TestNavX(){
 	SmartDashboard::PutNumber("Angle", RobotMap::ahrs->GetAngle());
 	SmartDashboard::PutNumber("Temperature (degrees celcius)", RobotMap::ahrs->GetTempC());
 	SmartDashboard::PutNumber("Yaw (z axis rotation,-180 to 180)",RobotMap::ahrs->GetYaw());
-
 }
 
 void Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
-
+	cycleStartTime = Timer::GetFPGATimestamp();
+	//slaving the second rotate talon
+	Robot::intake->intakeRotateTalon2->Set(4);
 	//ahrs (NavX) testing.  Should be disabled / commented out during competitions to reduce overhead
 	Robot::TestNavX();
 
-	SmartDashboard::PutNumber("vel",Robot::shooter->returnVel());
+	SmartDashboard::PutNumber("encoder dist",RobotMap::intakeEncoder->GetDistance());
 
-	SmartDashboard::PutNumber("amp",Robot::shooter->returnAmpVal());
-	SmartDashboard::PutNumber("volts",Robot::shooter->returnVoltVal());
-
-	Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetRawAxis(4),Robot::oi->getdriveStick()->GetY(),true);
-	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BACK)){
-		Robot::shooter->testPID(256*1200);
+	if(RobotMap::intakeEncoder->Get()<50){
+		Robot::intake->stopIntakeSpinners();
 	}
+
+	SmartDashboard::PutNumber("vel",Robot::shooter->returnVel());
+//	Robot::drivetrain->driveToAngle(Robot::oi->gettechStick()->GetY());
+	Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetY(),-1*Robot::oi->getdriveStick()->GetRawAxis(4),true);
 	if(prevRBumperState == false && Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER) == true){
 		if(intake->spinnerIsRunning() == true){
 			Robot::intake->stopSpinner();
@@ -183,10 +149,20 @@ void Robot::TeleopPeriodic() {
 			Robot::intake->takeBallIn();
 		}
 	}
+	if(prevLBumperState == false && Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER) == true){
+		if(intake->spinner2IsRunning() == true){
+			Robot::intake->stopSpinner2();
+		}
+		else{
+			Robot::intake->takeBallIn2();
+		}
+	}
 	prevRBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER);
-
-	//test function for the PID velocity control on the shooter.  Should also be disabled/commented out during competitions, and only used for testing purposes.
-	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::START)){
+	prevLBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER);
+	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BACK)){
+		Robot::shooter->testPID(256*1200);
+	}
+	else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::START)){
 		Robot::shooter->stopShooter();
 	}
 	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::ABUTTON)){
@@ -197,21 +173,64 @@ void Robot::TeleopPeriodic() {
 	}
 
 	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::YBUTTON)){
-		Robot::intake->moveArm(1);
+		Robot::intake->grabBall();
+	}
+	if (Robot::oi->gettechStick()->GetRawButton(XBOX::BBUTTON) || holdingBall){
+		toggleIntakeOff();
+		holdingBall = true;
+		Robot::intake->holdBall();
+	}
+	if(Robot::oi->gettechStick()->GetRawButton(XBOX::XBUTTON) && isFirstGather){
+		isFirstGather = false;
+		toggleIntakeOff();
+		loadingBall = true;
+		Robot::intake->loadingBall(cycleStartTime);
+		loadStartTime = cycleStartTime;
+	}
+	if(Robot::intake->intakeDone){
+		resetIntake();
+	}
+	if(Robot::oi->gettechStick()->GetRawButton(XBOX::YBUTTON) || grabbingBall){
+		Robot::toggleIntakeOff();
+		grabbingBall = true;
+		Robot::intake->grabBall();
+	}
+	if(!isFirstGather && loadingBall){
+		Robot::intake->loadingBall(loadStartTime);
+	}
+	if(Robot::oi->gettechStick()->GetRawButton(XBOX::ABUTTON)){
+		Robot::intake->readyToShoot = true;
 	}
 
-	else if (Robot::oi->getdriveStick()->GetRawButton(XBOX::BBUTTON)){
-		Robot::intake->moveArm(-1);
+	if(Robot::intake->readyToShoot){
+		Robot::shooter->testPID(11.23);
 	}
 
-	else {
-		Robot::intake->moveArm(0);
+	if(Robot::oi->gettechStick()->GetRawButton(XBOX::START)){
+		isFirstGather = true;
+		RobotMap::intakeEncoder->Reset();
+	}
+	if(Robot::oi->gettechStick()->GetRawButton(XBOX::BACK) || secondaryHold){
+		Robot::resetIntake();
+		Robot::intake->intakeRotateTalon1->Set(Robot::intake->calculatePID(122,RobotMap::intakeEncoder->Get(),.02,0,.08));
+		Robot::secondaryHold = true;
 	}
 }
+
 
 void Robot::TestPeriodic() {
 	lw->Run();
 }
+void Robot::resetIntake(){
+	isFirstGather = true;
+}
+void Robot::toggleIntakeOff(){
+	grabbingBall = false;
+	loadingBall = false;
+	holdingBall = false;
+	secondaryHold = false;
+	Robot::shooter->stopShooter();
+	Robot::intake->stopIntakeSpinners();
+}
 
 START_ROBOT_CLASS(Robot);
-

@@ -26,43 +26,13 @@ autonCommand::autonCommand(): Command() {
 // Called just before this Command runs the first time
 void autonCommand::Initialize() {
 	autonNumber = SmartDashboard::GetNumber("Auton Number: ",1);
+
 }
 
 // Called repeatedly when this Command is scheduled to run
 void autonCommand::Execute() {
-
-Robot::drivetrain->driveToAngle(0,-1*RobotMap::ahrs->GetAngle());
-
-
-//	encoderValue = (Robot::drivetrain->driveSRX1->GetEncPosition()+Robot::drivetrain->driveSRX3->GetEncPosition())/2;
-//	SmartDashboard::PutNumber("Encoder Value: ",encoderValue);
-//	if(encoderValue<=1000){
-//		autonState = 0;
-//	}
-//	else if(1000<encoderValue<=2000){
-//		autonState = 1;
-//	}
-//	else if(2000<encoderValue<=2785){
-//		autonState = 2;
-//	}
-//	switch(autonNumber){
-//	case 1://drive to outerworks by way of encoder
-//		auton1();
-//		break;
-//	case 2://drive under lowbar using NavX and encoders
-////		auton2();
-//		break;
-//	case 3://drive under lowbar using NavX and sonar, turn right, drive and shoot in high goal (no camera)
-////		auton3();
-//		break;
-//	case 4://drive straight over a rough terrain, then shoot high goal
-////		auton4();
-//		break;
-//	default:
-////		auton1();
-//		break;
-//	}
-
+	Robot::drivetrain->driveToAngle(-.5,0);
+//	Robot::drivetrain->driveSRX3->Set(.3);
 }
 
 // Make this return true when this Command no longer needs to run execute()
@@ -81,53 +51,11 @@ void autonCommand::Interrupted() {
 
 }
 void autonCommand::auton1(){
-	//drive to outerworks by drivetrain encoders
-	if(autonState==0){
-		Robot::drivetrain->driveToAngle(0.3,180);
-	}
 }
 void autonCommand::auton2(){
-	//drive under lowbar using NavX and drivetrain encoders
-	if( autonState == 0){
-		Robot::drivetrain->driveToAngle(-.8,0);
-	}
-	else if(autonState == 1){
-		Robot::drivetrain->driveToAngle(-.9,0);
-	}
 }
 void autonCommand::auton3(){
-	//drive under lowbar, turn right, drive, then shoot
-	if(autonState == 0){
-		Robot::drivetrain->driveToAngle(-.8,0);
-	}
-	else if(autonState == 1){
-		Robot::drivetrain->driveToAngle(-.9,0);
-	}
-	else if(autonState == 2){
-		Robot::drivetrain->driveToAngle(-.3,43);
-	}
-	else if(autonState == 3){
-		Robot::shooter->shootAuton3();
-	}
+
 }
 void autonCommand::auton4(){
-	if(autonState == 0){
-		Robot::drivetrain->driveToAngle(-.8,0);
-	}
-	else if(autonState == 1){
-		Robot::drivetrain->driveToAngle(-.9,0);
-	}
-	else if(autonState == 2){
-		Robot::drivetrain->driveToAngle(-.3,43);
-	}
-	else if(autonState == 3){
-		//process image, get angle to target
-//		anlgeToTarget = visionProc().GetAngle();
-		if(angleToTarget != NULL){
-			autonState = 4;
-		}
-	}
-	else if(autonState ==4){
-		Robot::drivetrain->driveToAngle(0,angleToTarget);
-	}
 }

@@ -25,12 +25,14 @@ autonCommand::autonCommand(): Command() {
 
 // Called just before this Command runs the first time
 void autonCommand::Initialize() {
+	autonNumber = SmartDashboard::GetNumber("Auton Number: ",1);
 
 }
 
 // Called repeatedly when this Command is scheduled to run
 void autonCommand::Execute() {
-
+	Robot::drivetrain->driveToAngle(-.5,0);
+//	Robot::drivetrain->driveSRX3->Set(.3);
 }
 
 // Make this return true when this Command no longer needs to run execute()
@@ -47,4 +49,13 @@ void autonCommand::End() {
 // subsystems is scheduled to run
 void autonCommand::Interrupted() {
 
+}
+void autonCommand::auton1(){
+}
+void autonCommand::auton2(){
+}
+void autonCommand::auton3(){
+
+}
+void autonCommand::auton4(){
 }

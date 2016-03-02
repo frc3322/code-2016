@@ -23,12 +23,6 @@ class Shooter: public Subsystem {
 private:
 	// It's desirable that everything possible is private except
 	// for methods that implement subsystem capabilities
-	std::shared_ptr<CANTalon> shooterBackTalon;
-	std::shared_ptr<Encoder> frontWheelEncoder;
-	std::shared_ptr<PIDController> frontWheelPID;
-	std::shared_ptr<CANTalon> shooterFrontTalon;
-	std::shared_ptr<Encoder> backWheelEncoder;
-	std::shared_ptr<PIDController> backWheelPID;
 
 public:
 	Shooter();
@@ -41,6 +35,14 @@ public:
 	float returnVoltVal();
 	float returnAmpVal();
 	void shootAuton3();
+	void killShooter();
+	std::shared_ptr<CANTalon> shooterBackTalon;
+	std::shared_ptr<Encoder> frontWheelEncoder;
+	std::shared_ptr<PIDController> frontWheelPID;
+	std::shared_ptr<CANTalon> shooterFrontTalon;
+	std::shared_ptr<Encoder> backWheelEncoder;
+	std::shared_ptr<PIDController> backWheelPID;
+
 };
 
 #endif

@@ -22,11 +22,7 @@
 
 Shooter::Shooter() : Subsystem("Shooter") {
     shooterBackTalon = RobotMap::shootershooterTalon1;
-    frontWheelEncoder = RobotMap::shooterfrontWheelEncoder;
-    frontWheelPID = RobotMap::shooterfrontWheelPID;
     shooterFrontTalon = RobotMap::shootershooterTalon2;
-    backWheelEncoder = RobotMap::shooterbackWheelEncoder;
-    backWheelPID = RobotMap::shooterbackWheelPID;
 
 }
 
@@ -55,11 +51,11 @@ void Shooter::testPID(float setpointFront){
 	shooterFrontTalon->SelectProfileSlot(0);
 	shooterFrontTalon->SetSensorDirection(true);
 	shooterFrontTalon->SetControlMode(CANTalon::ControlMode::kSpeed);
-	shooterFrontTalon->Set(46000);
+	shooterFrontTalon->Set(4096*setpointFront);
 }
 void Shooter::stopShooter(){
-	shooterBackTalon->Set(0);
-	shooterFrontTalon->Set(0);
+	shooterFrontTalon->SelectProfileSlot(1);
+//	shooterFrontTalon->Set(0);
 }
 void Shooter::initShooter(){
 	shooterBackTalon->Enable();
@@ -76,7 +72,7 @@ float Shooter::returnAmpVal(){
 	return shooterFrontTalon->GetOutputCurrent();
 }
 void Shooter::shootAuton3(){
-	shooterFrontTalon->SelectProfileSlot(1);
+	shooterFrontTalon->SelectProfileSlot(0);
 	shooterFrontTalon->SetControlMode(CANTalon::ControlMode::kSpeed);
 	shooterFrontTalon->Set(46000);
 }

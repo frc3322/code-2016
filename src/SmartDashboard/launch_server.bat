@@ -1,5 +1,5 @@
 @echo off
 
-cd %~dp0
-py -3 driverStationServer.py --host 10.14.18.2
+start http://localhost:3322
+python initialize.py
 pause

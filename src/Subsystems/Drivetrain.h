@@ -39,18 +39,26 @@ public:
 	std::shared_ptr<CANTalon> driveSRX3;
 	std::shared_ptr<CANTalon> driveSRX4;
 	std::shared_ptr<PowerDistributionPanel> powerDistPanel;
+
 	void EnableSRX();
+
 	PIDController *turnController;
-	PIDOutput *output;
+
 	int getVelocity(int currentGear);
-	float driveToAngle(float velocity, float setpoint);
+	float driveToAngle(float velocity,float targetAngle);
+
     double rotateToAngleRate;
     float setpoint;
+
     virtual void PIDWrite(float output);
 	void gearShift(int position);
 	void autoShift();
 
-	constexpr static double kP = 0.03f;
+	void Skvarek();
+
+	void Schneyer();
+
+	constexpr static double kP = 0.30f;
 	constexpr static double kI = 0.00f;
 	constexpr static double kD = 0.00f;
 	constexpr static double kF = 0.00f;
@@ -61,7 +69,11 @@ public:
 	//shift into low gear, function not made
 	int currentGear = 0; //0 = low, 1 = high
 
+	double angleToTurn(double currentAngle, double targetAngle);
 
+	double provisionalAngle;
+	double targetAngle;
+	double currentAngle;
 
 
 };

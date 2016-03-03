@@ -37,11 +37,14 @@
 	<div class="camera-content">
 		<span> Camera Front </span>
 		<img id="webcam" width=320 height=240 src="Resources/CamFeedOffline.png"/>
+		<script>
+			document.getElementById("webcam").src = Config.webcam+"/?action=stream"
+		</script>
+
 		<span> 3322 Eagle Imperium </span>
 	</div>
 	
-	<img id="eaglelogo" width=100 height=100 src="Resources/3322-eagle.png" />
-	
+	<img id="eaglelogo" width=100 height=100 src="Resources/3322-eagle.png" />	
 </div>
 
 <div class="MainDivide" id="RobotDiagram">
@@ -153,10 +156,8 @@ function onRobotConnection(connected) {
 		document.getElementById("connection").style.fontSize = "24px"
 	if (connected) {
 		document.getElementById("connection").style.color = "green"
-		document.getElementById("webcam").src = Config.webcam + "/?action=stream"
 	} else {
 		document.getElementById("connection").style.color = "red"
-		document.getElementById("webcam").src = "Resources/CamFeedOffline.png"
 	}
 	$('#connection').val((connected ? "CONNECTED" : "NOT CONNECTED"))
 

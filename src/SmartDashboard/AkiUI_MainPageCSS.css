@@ -43,7 +43,7 @@
     /*background-image:url("RobotUIBackground.png");*/
     /*background-color: #EBF8FF;*/
     background-image:-webkit-linear-gradient(top,#3ECCFB 0,##000 100%);
-    background-image:-o-linear-gradient(top,#3ECCFB 0,#000 100%);
+    background-image:-o-linear-gradient(top,#3ECCFB 0,#1111 100%);
     background-image:-webkit-gradient(linear,left top,left bottom,from(#3ECCFB),to(#000));
     background-image:linear-gradient(to bottom,#3ECCFB 0,#000 100%);
     background-size:100vw 100vh;

@@ -1,5 +1,9 @@
 $(document).ready(function() {
 
+function getAngle()
+{
+	$('#arm-angle').val(NetworkTables.getValue('/SmartDashboard/armangle', 0.0))
+}
 
 function getGear()
 {
@@ -63,5 +67,6 @@ setInterval(function() {
 	getDirection();
 	getLoadSpeed();
 	getShootSpeed();
+	getAngle();
 }, 20);
 });

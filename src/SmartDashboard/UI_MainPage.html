@@ -35,7 +35,7 @@
 	</div>
 	-->
 	<div class="camera-content">
-		<span> Camera Front </span>
+		<span> Camera </span>
 		<img id="webcam" width=320 height=240 src="Resources/CamFeedOffline.png"/>
 		<script>
 			document.getElementById("webcam").src = Config.webcam+"/?action=stream"
@@ -69,12 +69,33 @@
 		<span class="font-eagle">Arm Angle </span>
 		<input type="number" name="armangle" id="arm-angle" step="0" max="1.0" min="-1.0"/> <br/>
 	</div>
+	<br/><br/>
+	<div>
+		<span class="font-eagle">Encoder 1 </span>
+		<input type="number" name="encoder1" id="encoder-1" step="0" max="1.0" min="-1.0"/> <br/>
+	</div>
+	<div>
+		<span class="font-eagle">Encoder 2 </span>
+		<input type="number" name="encoder2" id="encoder-2" step="0" max="1.0" min="-1.0"/> <br/>
+	</div>
 </div>
 
 <div class="MainDivide" id="AutoBox">
 
-	<input type="text" name="robot-connection" id="connection"/><br/>
-	<input type="text" name="robot-gear" id="robot-gear"/><br/>
+	<input type="text" name="robot-connection" readonly id="connection"/><br/>
+	<input type="text" name="robot-gear" readonly id="robot-gear"/><br/>
+	<br/><br/>
+	<input type="text" name="robot-mode" id="auton-mode"/><br/>
+	<script>
+		document.getElementById("auton-mode").style.color = "black";
+		document.getElementById("auton-mode").style.fontSize = "24px";
+		$('#auton-mode').val("None")
+	</script>
+		
+	<form action="">
+		<input type="radio" name="autonmode" id="auton-none" value="None"> None<br>
+		<input type="radio" name="autonmode" id="auton-lowbar" value="Low Bar"> Low Bar<br>
+	</form>
 </div>
 
 <script type="text/javascript">

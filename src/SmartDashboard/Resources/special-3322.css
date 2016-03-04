@@ -35,7 +35,9 @@ input::-webkit-inner-spin-button {
 #direction,
 #load-speed,
 #shoot-speed,
-#arm-angle {
+#arm-angle,
+#encoder-1,
+#encoder-2 {
 	border-color: rgba(0,0,0,0);
 	float: right;
 	background-color: #000;
@@ -46,7 +48,8 @@ input::-webkit-inner-spin-button {
 }
 
 #connection,
-#robot-gear {
+#robot-gear,
+#auton-mode {
 	border-color: rgba(255,0,0,0);
 	background-color:rgba(255,0,0,0);
 	float: right;

@@ -1,5 +1,21 @@
 $(document).ready(function() {
 
+$('#auton-none').click(function () {
+	NetworkTables.setValue('/SmartDashboard/autonMode', 0, 0)
+	$('#auton-mode').val("None")
+    });
+
+$('#auton-lowbar').click(function () {
+	NetworkTables.setValue('/SmartDashboard/autonMode', 1, 0)
+	$('#auton-mode').val("Low Bar")
+    });
+    
+function getEncoders()
+{
+	$('#encoder-1').val(NetworkTables.getValue('/SmartDashboard/encoder1', 0.0))
+	$('#encoder-2').val(NetworkTables.getValue('/SmartDashboard/encoder1', 0.0))
+}
+
 function getAngle()
 {
 	$('#arm-angle').val(NetworkTables.getValue('/SmartDashboard/armangle', 0.0))
@@ -68,5 +84,6 @@ setInterval(function() {
 	getLoadSpeed();
 	getShootSpeed();
 	getAngle();
-}, 20);
+	getEncoders();
+}, 50);
 });

@@ -36,8 +36,8 @@ Intake::Intake() : Subsystem("Intake") {
     spinTalonRunning = false;
 
     intakeRotateTalon2->SetControlMode(CANTalon::ControlMode::kFollower);
-    intakeRotateTalon2->Set(4);
-
+    intakeRotateTalon2->Set(3);
+    intakeRotateTalon2->SetInverted(true);
 }
 
 void Intake::InitDefaultCommand() {
@@ -51,23 +51,24 @@ void Intake::InitDefaultCommand() {
 
 void Intake::takeBallIn(){
 	intakeSpinTalon1->Set(-1);
+	intakeSpinTalon2->Set(-1);
 	spinTalonRunning = true;
 
 //	intakeRotateTalon1->Set(-.4);
 }
-void Intake::takeBallIn2(){
+void Intake::takeBallIn2(){ //Deprecated
 	intakeSpinTalon2->Set(-1);
 	spinTalon2Running = true;
 }
 void Intake::stopSpinner(){
 	intakeSpinTalon1->Set(0);
-	intakeRotateTalon1->Set(0);
+	intakeSpinTalon2->Set(0);
 //	intakeRotateTalon2->Set(0);
 	spinTalonRunning = false;
 
 }
 void Intake::stopSpinner2(){
-	intakeSpinTalon2->Set(0);
+	intakeSpinTalon2->Set(0); //deprecated
 	spinTalon2Running = false;
 }
 
@@ -106,15 +107,16 @@ void Intake::setPosition(int setpoint,float p,float i,float d,float f){
 void Intake::grabBall(){
 	intakeSpinTalon1->Set(.2);
 	intakeSpinTalon2->Set(-.7);
-	intakeRotateTalon1->Set(Intake::calculatePID(270,RobotMap::intakeEncoder->Get(),.02,0,.08));
+	intakeRotateTalon1->Set(Intake::calculatePID(-270,RobotMap::intakeEncoder->GetDistance(),.015,0,.08));
 }
 void Intake::holdBall(){
 	intakeSpinTalon1->Set(0);
-	intakeRotateTalon1->Set(Intake::calculatePID(350,intakeRotateTalon1->GetEncPosition(),.02,0,.08));
+	intakeRotateTalon1->Set(Intake::calculatePID(-300,RobotMap::intakeEncoder->GetDistance(),.015,0,.08));
 }
 double Intake::calculatePID(double setpoint, double current, double Kp, double Ki, double Kd){
-	double encoderAngle = (282.5-current)*(3.1415/2)/(182.75);
-	f = -.4*cos(encoderAngle);
+	double encoderAngle = (-285.5-current)*(3.1415/2)/(-182.75);
+	printf("encoder angle %f",encoderAngle);
+	f = .4*cos(encoderAngle);
 //	return f;
 	double dVal = 0;
 	Ki = 0.0000;
@@ -126,12 +128,13 @@ double Intake::calculatePID(double setpoint, double current, double Kp, double K
 	}
 	previousIVal = iVal;
 	previous = current;
-	return (Kp*(setpoint-current) + f)+(iVal*Ki)+-dVal;
+//	return f;
+	return (Kp*(setpoint-current))+(iVal*Ki)+-dVal;
 
 }
 void Intake::loadingBall(double cycleStartTime){
 	intakeDone = false;
-	Robot::shooter->testPID(13.23);
+	Robot::shooter->testPID(11.23);
 	printf("cycle start time %f ",cycleStartTime);
 	printf("if statement value %f",(Timer::GetFPGATimestamp()-.5));
 	if((Timer::GetFPGATimestamp())>(cycleStartTime)){
@@ -156,3 +159,6 @@ void Intake::stopIntakeSpinners(){
 	intakeSpinTalon1->Set(0);
 	intakeSpinTalon2->Set(0);
 }
+//void Intake::spinBack(){
+
+//}

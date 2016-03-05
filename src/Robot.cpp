@@ -49,7 +49,25 @@ void Robot::RobotInit() {
 	Robot::shooter->initShooter();
 	Robot::intake->init();
 	RobotMap::ahrs->ZeroYaw();
-	CameraServer::GetInstance()->StartAutomaticCapture("cam0");
+//	CameraServer::GetInstance()->StartAutomaticCapture("cam0");
+}
+
+void clearStickyFaults() {
+	RobotMap::drivetraindriveSRX1->ClearStickyFaults();
+	RobotMap::drivetraindriveSRX2->ClearStickyFaults();
+	RobotMap::drivetraindriveSRX3->ClearStickyFaults();
+	RobotMap::drivetraindriveSRX4->ClearStickyFaults();
+
+	RobotMap::shootershooterTalon1->ClearStickyFaults();
+	RobotMap::shootershooterTalon2->ClearStickyFaults();
+
+	RobotMap::intakeintakeSpinTalon1->ClearStickyFaults();
+	RobotMap::intakeintakeSpinTalon2->ClearStickyFaults();
+	RobotMap::intakeintakeRotateTalon1->ClearStickyFaults();
+	RobotMap::intakeintakeRotateTalon2->ClearStickyFaults();
+
+	RobotMap::catACatA1->ClearStickyFaults();
+	RobotMap::catACatA2->ClearStickyFaults();
 }
 
 /**
@@ -59,6 +77,7 @@ void Robot::RobotInit() {
  */
 
 void Robot::DisabledInit(){
+	clearStickyFaults();
 	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();
 }
@@ -69,15 +88,15 @@ void Robot::DisabledPeriodic() {
 	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::ABUTTON)){
 		RobotMap::intakeEncoder->Reset();
 	}
-	Robot::TestNavX();
+	Robot::LogNavXValues();
 	SmartDashboard::PutNumber("ticks ",Robot::shooter->shooterFrontTalon->GetEncPosition());
 
 }
 
 void Robot::AutonomousInit() {
 	Robot::drivetrain->EnableSRX();
-	Robot::shooter->initShooter();
-	Robot::intake->init();
+//	Robot::shooter->initShooter();
+//	Robot::intake->init();
 	Robot::drivetrain->autoShift();
 //	std::thread autoShiftthread(autoShift);
 	prevRBumperState = false;
@@ -93,7 +112,7 @@ void Robot::AutonomousInit() {
 
 void Robot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
-	Robot::TestNavX();
+	Robot::LogNavXValues();
 
 
 }
@@ -108,7 +127,7 @@ void Robot::TeleopInit() {
 	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();
 	Robot::intake->init();
-	Robot::drivetrain->autoShift();
+//	Robot::drivetrain->autoShift();
 //	std::thread autoShiftthread(autoShift);
 	prevRBumperState = false;
 	prevLBumperState = false;
@@ -118,7 +137,7 @@ void Robot::TeleopInit() {
 	Robot::ahrs->ZeroYaw();
 }
 
-void Robot::TestNavX(){
+void Robot::LogNavXValues(){
 	SmartDashboard::PutNumber("Angle", RobotMap::ahrs->GetAngle());
 	SmartDashboard::PutNumber("Temperature (degrees celcius)", RobotMap::ahrs->GetTempC());
 	SmartDashboard::PutNumber("Yaw (z axis rotation,-180 to 180)",RobotMap::ahrs->GetYaw());
@@ -128,43 +147,56 @@ void Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 	cycleStartTime = Timer::GetFPGATimestamp();
 	//slaving the second rotate talon
-	Robot::intake->intakeRotateTalon2->Set(4);
+	Robot::intake->intakeRotateTalon2->Set(3);
 	//ahrs (NavX) testing.  Should be disabled / commented out during competitions to reduce overhead
-	Robot::TestNavX();
+//	Robot::LogNavXValues();
 
 	SmartDashboard::PutNumber("encoder dist",RobotMap::intakeEncoder->GetDistance());
-
-	if(RobotMap::intakeEncoder->Get()<50){
-		Robot::intake->stopIntakeSpinners();
-	}
-
-	SmartDashboard::PutNumber("vel",Robot::shooter->returnVel());
+//	SmartDashboard::PutNumber("vel",Robot::shooter->returnVel());
 //	Robot::drivetrain->driveToAngle(Robot::oi->gettechStick()->GetY());
 	Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetY(),-1*Robot::oi->getdriveStick()->GetRawAxis(4),true);
-	if(prevRBumperState == false && Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER) == true){
-		if(intake->spinnerIsRunning() == true){
-			Robot::intake->stopSpinner();
-		}
-		else{
-			Robot::intake->takeBallIn();
-		}
+
+//	if(prevRBumperState == false && Robot::oi->gettechStick()->GetRawButton(XBOX::RBUMPER) == true){
+//		if(intake->spinnerIsRunning() == true){
+//			Robot::intake->stopSpinner();
+//		}
+//		else{
+//			Robot::intake->takeBallIn();
+//		}
+//	}
+//	if(prevLBumperState == false && Robot::oi->gettechStick()->GetRawButton(XBOX::LBUMPER) == true){
+//		if(intake->spinner2IsRunning() == true){
+//			Robot::intake->stopSpinner2();
+//		}
+//		else{
+//			Robot::intake->takeBallIn2();
+//		}
+//	}
+
+	if(Robot::oi->gettechStick()->GetRawButton(XBOX::LBUMPER)){
+		Robot::intake->takeBallIn();
 	}
-	if(prevLBumperState == false && Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER) == true){
-		if(intake->spinner2IsRunning() == true){
-			Robot::intake->stopSpinner2();
-		}
-		else{
-			Robot::intake->takeBallIn2();
-		}
+	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER)){
+		Robot::catA->catA1->Set(-.5);
+		Robot::catA->catA2->Set(.5);
 	}
-	prevRBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER);
-	prevLBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER);
-	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BACK)){
-		Robot::shooter->testPID(256*1200);
+	else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER)){
+		Robot::catA->catA1->Set(.5);
+		Robot::catA->catA2->Set(-.5);
 	}
-	else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::START)){
-		Robot::shooter->stopShooter();
+	else{
+		Robot::catA->catA1->Set(0);
+		Robot::catA->catA2->Set(0);
 	}
+//	prevRBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER);
+//	prevLBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER);
+//	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BACK)){
+//		Robot::shooter->testPID(256*1200);
+//	}
+//	else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::START)){
+//		Robot::shooter->stopShooter();
+//	}
+
 	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::ABUTTON)){
 		Robot::drivetrain->gearShift(1);
 	}
@@ -173,7 +205,31 @@ void Robot::TeleopPeriodic() {
 	}
 
 	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::YBUTTON)){
-		Robot::intake->grabBall();
+//		Robot::intake->grabBall();
+	}
+	if(Robot::oi->gettechStick()->GetRawButton(XBOX::RBUMPER)){
+		holdingBall = false;
+		loadingBall = false;
+		grabbingBall = false;
+
+		if(RobotMap::intakeEncoder->Get()<50){
+			Robot::intake->stopIntakeSpinners();
+		}
+
+		if(Robot::oi->gettechStick()->GetRawButton(XBOX::LSTICKP)){
+			Robot::intake->intakeRotateTalon1->Set(-1);
+		}
+		else if(Robot::oi->gettechStick()->GetRawButton(XBOX::RSTICKP)){
+			Robot::intake->intakeRotateTalon1->Set(1);
+
+		}
+		else{
+			Robot::intake->intakeRotateTalon1->Set(0);
+		}
+
+	}
+	if(Robot::oi->gettechStick()->GetRawButton(XBOX::ABUTTON)){
+		Robot::shooter->testPID(11.23);
 	}
 	if (Robot::oi->gettechStick()->GetRawButton(XBOX::BBUTTON) || holdingBall){
 		toggleIntakeOff();

@@ -117,11 +117,11 @@ double Intake::calculatePID(double setpoint, double current, double Kp, double K
 	double encoderAngle = (-285.5-current)*(3.1415/2)/(-182.75);
 	printf("encoder angle %f",encoderAngle);
 	f = .4*cos(encoderAngle);
-//	return f;
+
 	double dVal = 0;
 	Ki = 0.0000;
 	double iVal = previousIVal + (double)setpoint-(double)current;
-	printf("IVal %f",iVal);
+//	printf("IVal %f",iVal);
 	if(previous != 0){
 		dVal = ((double)current-(double)previous)*Kd;
 //		printf("Dval %f",dVal);
@@ -129,7 +129,7 @@ double Intake::calculatePID(double setpoint, double current, double Kp, double K
 	previousIVal = iVal;
 	previous = current;
 //	return f;
-	return (Kp*(setpoint-current))+(iVal*Ki)+-dVal;
+	return (Kp*(setpoint-current))+(iVal*Ki)+-dVal; //there used to be an f term here. maybe that's why its jittery?
 
 }
 void Intake::loadingBall(double cycleStartTime){

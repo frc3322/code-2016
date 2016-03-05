@@ -79,7 +79,7 @@ void clearStickyFaults() {
 void Robot::DisabledInit(){
 	clearStickyFaults();
 	Robot::drivetrain->EnableSRX();
-	Robot::shooter->initShooter();
+	Robot::shooter->initShooter();  //do we need this (see line 49)
 }
 
 void Robot::DisabledPeriodic() {
@@ -90,14 +90,13 @@ void Robot::DisabledPeriodic() {
 	}
 	Robot::LogNavXValues();
 	SmartDashboard::PutNumber("ticks ",Robot::shooter->shooterFrontTalon->GetEncPosition());
-
 }
 
 void Robot::AutonomousInit() {
 	Robot::drivetrain->EnableSRX();
 //	Robot::shooter->initShooter();
 //	Robot::intake->init();
-	Robot::drivetrain->autoShift();
+//	Robot::drivetrain->autoShift();
 //	std::thread autoShiftthread(autoShift);
 	prevRBumperState = false;
 	prevLBumperState = false;

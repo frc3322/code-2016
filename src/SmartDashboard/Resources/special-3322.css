@@ -20,7 +20,7 @@ input::-webkit-inner-spin-button {
 .font-eagle {
 	color: #FFF;
 	font-family: Impact, Sans;
-	font-size: 32px;
+	font-size: 20px;
 }
 
 .robot-status {
@@ -28,7 +28,7 @@ input::-webkit-inner-spin-button {
 	color: #FFF;
 	text-align: center;
 	font-family: Impact, Sans;
-	font-size: 24px;
+	font-size: 12px;
 }
 
 #speed,
@@ -42,9 +42,9 @@ input::-webkit-inner-spin-button {
 	float: right;
 	background-color: #000;
 	color: #3ECCFB;
-	width: 240px;
+	width: 180px;
 	font-family: Courier New, Monospace;
-	font-size: 16px;
+	font-size: 12px;
 }
 
 #connection,
@@ -56,7 +56,14 @@ input::-webkit-inner-spin-button {
 	color: #3ECCFB;
 	width: 220px;
 	font-family: Courier New, Monospace;
-	font-size: 16px;
+	font-size: 12px;
 	font-weight: bold;
 	text-align: center;
+}
+
+#intake-pid-on,
+#intake-pid-off {
+	background-color: white;
+	font-family: Impact, Sans;
+	
 }

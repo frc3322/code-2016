@@ -55,8 +55,8 @@
   left: 1vw;
   top: 2vh;
 
-  width: 28vw;
-  height: 54vh;
+  width: 54vw;
+  height: 96vh;
 }
 
 #leftSection ul {
@@ -87,15 +87,15 @@
 #eaglelogo {
   position: fixed;
   top: 76vh;
-  left: 11vw;
+  left: 85.5vw;
 }
 
 #RobotDiagram{
     position: fixed;
-    left: 29.5vw;
+    left: 55vw;
     top: 2vh;
     height: 96vh;
-    width: 50vw;
+    width: 25vw;
 
 }
 

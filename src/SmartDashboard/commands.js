@@ -1,5 +1,13 @@
 $(document).ready(function() {
 
+$('#intake-pid-on').click(function() {
+	NetworkTables.setValue('/SmartDashboard/useIntake', true, false);
+});
+
+$('#intake-pid-off').click(function() {
+	NetworkTables.setValue('/SmartDashboard/useIntake', false, false);
+});
+
 $('#auton-none').click(function () {
 	NetworkTables.setValue('/SmartDashboard/autonMode', 0, 0)
 	$('#auton-mode').val("None")

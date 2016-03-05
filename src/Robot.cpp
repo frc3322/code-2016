@@ -98,8 +98,6 @@ void Robot::AutonomousInit() {
 //	Robot::intake->init();
 //	Robot::drivetrain->autoShift();
 //	std::thread autoShiftthread(autoShift);
-	prevRBumperState = false;
-	prevLBumperState = false;
 	Robot::toggleIntakeOff();
 	RobotMap::intakeEncoder->Reset();
 	SmartDashboard::PutNumber("thing happened! ",0);

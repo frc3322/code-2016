@@ -52,7 +52,7 @@ public:
 	virtual void TeleopInit();
 	virtual void TeleopPeriodic();
 	virtual void TestPeriodic();
-	virtual void TestNavX();
+	virtual void LogNavXValues();
 	void autoShift();
 	void gearShift(int position);
 	void checkGatherer();

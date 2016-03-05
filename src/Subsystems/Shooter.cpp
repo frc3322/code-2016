@@ -49,9 +49,9 @@ void Shooter::testPID(float setpointFront){
 	shooterBackTalon->SetControlMode(CANTalon::ControlMode::kFollower);
 	shooterBackTalon->Set(10);
 	shooterFrontTalon->SelectProfileSlot(0);
-	shooterFrontTalon->SetSensorDirection(true);
+	shooterFrontTalon->SetSensorDirection(false);
 	shooterFrontTalon->SetControlMode(CANTalon::ControlMode::kSpeed);
-	shooterFrontTalon->Set(4096*setpointFront);
+	shooterFrontTalon->Set(-4096*setpointFront);
 }
 void Shooter::stopShooter(){
 	shooterFrontTalon->SelectProfileSlot(1);

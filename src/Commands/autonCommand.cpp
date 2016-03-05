@@ -26,12 +26,12 @@ autonCommand::autonCommand(): Command() {
 // Called just before this Command runs the first time
 void autonCommand::Initialize() {
 	autonNumber = SmartDashboard::GetNumber("Auton Number: ",1);
-
 }
 
 // Called repeatedly when this Command is scheduled to run
 void autonCommand::Execute() {
-	Robot::drivetrain->driveToAngle(-.5,0);
+//	Robot::drivetrain->driveToAngle(-.3,0);
+	Robot::drivetrain->getDrive()->ArcadeDrive(-.5,.03*RobotMap::ahrs->GetYaw());
 //	Robot::drivetrain->driveSRX3->Set(.3);
 }
 

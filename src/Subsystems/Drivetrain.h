@@ -49,6 +49,7 @@ public:
 
     double rotateToAngleRate;
     float setpoint;
+    bool isInHighGear;
 
     virtual void PIDWrite(float output);
 	void gearShift(int position);

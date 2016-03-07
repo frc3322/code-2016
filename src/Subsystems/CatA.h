@@ -38,6 +38,8 @@ public:
 	void portcollisLift();
 	void chivelDeFrise();
 	void init();
+	void lower();
+	void stop();
 	double f;
 	double iVal = 0;
 	double previousIVal = 0;
@@ -45,6 +47,7 @@ public:
 	double previous = 0;
 	double maxEncoder = 0;
 	double previousError = 0;
+
 
 };
 

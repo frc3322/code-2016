@@ -80,16 +80,19 @@ void Robot::DisabledInit(){
 	clearStickyFaults();
 	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();  //do we need this (see line 49)
+	Robot::catA->init();
 }
 
 void Robot::DisabledPeriodic() {
 	Scheduler::GetInstance()->Run();
-	SmartDashboard::PutNumber("encoder dist",RobotMap::intakeEncoder->GetDistance());
+	SmartDashboard::PutNumber("intake encoder dist",RobotMap::intakeEncoder->GetDistance());
+
 	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::ABUTTON)){
 		RobotMap::intakeEncoder->Reset();
 	}
 	Robot::LogNavXValues();
 	SmartDashboard::PutNumber("ticks ",Robot::shooter->shooterFrontTalon->GetEncPosition());
+	SmartDashboard::PutNumber("Category A ticks",Robot::catA->catA2->GetEncPosition());
 }
 
 void Robot::AutonomousInit() {
@@ -140,6 +143,12 @@ void Robot::LogNavXValues(){
 	SmartDashboard::PutNumber("Yaw (z axis rotation,-180 to 180)",RobotMap::ahrs->GetYaw());
 }
 
+void Robot::LogHTMLDashboardValues() {
+	SmartDashboard::PutBoolean("highGear", drivetrain->isInHighGear);
+	SmartDashboard::PutNumber("encoder1",RobotMap::intakeEncoder->GetDistance());
+	SmartDashboard::PutNumber("encoder2",Robot::catA->catA2->GetEncPosition());
+}
+
 void Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 	cycleStartTime = Timer::GetFPGATimestamp();
@@ -149,26 +158,10 @@ void Robot::TeleopPeriodic() {
 //	Robot::LogNavXValues();
 
 	SmartDashboard::PutNumber("encoder dist",RobotMap::intakeEncoder->GetDistance());
-//	SmartDashboard::PutNumber("vel",Robot::shooter->returnVel());
+	SmartDashboard::PutNumber("vel",Robot::shooter->returnVel());
 //	Robot::drivetrain->driveToAngle(Robot::oi->gettechStick()->GetY());
 	Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetY(),-1*Robot::oi->getdriveStick()->GetRawAxis(4),true);
 
-//	if(prevRBumperState == false && Robot::oi->gettechStick()->GetRawButton(XBOX::RBUMPER) == true){
-//		if(intake->spinnerIsRunning() == true){
-//			Robot::intake->stopSpinner();
-//		}
-//		else{
-//			Robot::intake->takeBallIn();
-//		}
-//	}
-//	if(prevLBumperState == false && Robot::oi->gettechStick()->GetRawButton(XBOX::LBUMPER) == true){
-//		if(intake->spinner2IsRunning() == true){
-//			Robot::intake->stopSpinner2();
-//		}
-//		else{
-//			Robot::intake->takeBallIn2();
-//		}
-//	}
 
 	if(Robot::oi->gettechStick()->GetRawButton(XBOX::LBUMPER)){
 		Robot::intake->takeBallIn();
@@ -201,9 +194,6 @@ void Robot::TeleopPeriodic() {
 		Robot::drivetrain->gearShift(0);
 	}
 
-	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::YBUTTON)){
-//		Robot::intake->grabBall();
-	}
 	if(Robot::oi->gettechStick()->GetRawButton(XBOX::RBUMPER)){
 		holdingBall = false;
 		loadingBall = false;
@@ -263,11 +253,14 @@ void Robot::TeleopPeriodic() {
 		isFirstGather = true;
 		RobotMap::intakeEncoder->Reset();
 	}
-	if(Robot::oi->gettechStick()->GetRawButton(XBOX::BACK) || secondaryHold){
-		Robot::resetIntake();
-		Robot::intake->intakeRotateTalon1->Set(Robot::intake->calculatePID(122,RobotMap::intakeEncoder->Get(),.02,0,.08));
-		Robot::secondaryHold = true;
-	}
+//	if(Robot::oi->gettechStick()->GetRawButton(XBOX::BACK) || secondaryHold){
+//		Robot::resetIntake();
+//		Robot::intake->intakeRotateTalon1->Set(Robot::intake->calculatePID(122,RobotMap::intakeEncoder->Get(),.02,0,.08));
+//		Robot::secondaryHold = true;
+//	}
+//	if(Robot::oi->gettechStick()->GetRawButton(XBOX::BACK)){
+//		Robot::catA->chivelDeFrise();
+//	}
 }
 
 

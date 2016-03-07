@@ -21,7 +21,7 @@ $('#auton-lowbar').click(function () {
 function getEncoders()
 {
 	$('#encoder-1').val(NetworkTables.getValue('/SmartDashboard/encoder1', 0.0))
-	$('#encoder-2').val(NetworkTables.getValue('/SmartDashboard/encoder1', 0.0))
+	$('#encoder-2').val(NetworkTables.getValue('/SmartDashboard/encoder2', 0.0))
 }
 
 function getAngle()

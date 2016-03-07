@@ -115,7 +115,7 @@ void Intake::holdBall(){
 }
 double Intake::calculatePID(double setpoint, double current, double Kp, double Ki, double Kd){
 	double encoderAngle = (-285.5-current)*(3.1415/2)/(-182.75);
-	printf("encoder angle %f",encoderAngle);
+//	printf("encoder angle %f",encoderAngle);
 	f = .4*cos(encoderAngle);
 
 	double dVal = 0;
@@ -129,12 +129,13 @@ double Intake::calculatePID(double setpoint, double current, double Kp, double K
 	previousIVal = iVal;
 	previous = current;
 //	return f;
-	return (Kp*(setpoint-current))+(iVal*Ki)+-dVal; //there used to be an f term here. maybe that's why its jittery?
+
+	return (Kp*(setpoint-current) + f)+(iVal*Ki)+-dVal; //there used to be an f term here. maybe that's why its jittery?
 
 }
 void Intake::loadingBall(double cycleStartTime){
 	intakeDone = false;
-	Robot::shooter->testPID(11.23);
+	Robot::shooter->testPID(11.80);
 	printf("cycle start time %f ",cycleStartTime);
 	printf("if statement value %f",(Timer::GetFPGATimestamp()-.5));
 	if((Timer::GetFPGATimestamp())>(cycleStartTime)){
@@ -142,14 +143,15 @@ void Intake::loadingBall(double cycleStartTime){
 		intakeSpinTalon2->Set(-1);
 	}
 	if((Timer::GetFPGATimestamp()-1.55)>(double)cycleStartTime){
-		intakeRotateTalon1->Set(Intake::calculatePID(0,RobotMap::intakeEncoder->Get(),.02,0,.08));
+//		intakeRotateTalon1->Set(Intake::calculatePID(0,RobotMap::intakeEncoder->Get(),.02,0,.08));
 		intakeDone = true;
 		readyToShoot = false;
 	}
 	if((Timer::GetFPGATimestamp()-2.5)>(double)cycleStartTime){
 		intakeSpinTalon1->Set(0);
 		intakeSpinTalon2->Set(0);
-		RobotMap::intakeEncoder->Reset();
+		Robot::shooter->testPID(0);
+//		RobotMap::intakeEncoder->Reset();
 
 		SmartDashboard::PutNumber("thing happened! ",cycleStartTime);
 	}

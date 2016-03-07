@@ -28,22 +28,33 @@ CatA::CatA() : Subsystem("CatA") {
 void CatA::init(){
 	catA1->Enable();
 	catA2->Enable();
-	catA1->SetControlMode(CANTalon::ControlMode::kFollower);
-	catA1->Set(11);
-	catA1->Set(0);
+	catA2->SetEncPosition(0);
 }
 void CatA::chivelDeFrise(){
-	catA2->Set(CatA::calculatePID(0,catA1->GetEncPosition(),.02,0,.08));
+	catA2->Set(CatA::calculatePID(0,catA2->GetEncPosition(),.02,0,.08));   //1350, 480
 }
 void CatA::portcollisInit(){
-	catA2->Set(CatA::calculatePID(0,catA1->GetEncPosition(),.02,0,.08));
+	catA2->Set(CatA::calculatePID(0,catA2->GetEncPosition(),.02,0,.08));
 
 }
 void CatA::portcollisLift(){
-	catA2->Set(CatA::calculatePID(0,catA1->GetEncPosition(),.02,0,.08));
+	catA2->Set(CatA::calculatePID(0,catA2->GetEncPosition(),.02,0,.08));
 }
+
+void CatA::lower() {
+	catA1->Set(.5);
+	catA2->Set(-.5);
+}
+
+void CatA::stop() {
+	catA1->Set(0);
+	catA2->Set(0);
+}
+
 double CatA::calculatePID(double setpoint, double current, double Kp, double Ki, double Kd){
-	double encoderAngle = (282.5-current)*(3.1415/2)/(182.75);
+	int dir = 1; //flip sign to change direction
+	const float horPos = 282.5;
+	double encoderAngle = (dir*horPos-current)*(3.1415/2)/(182.75);  //horizontal is 1350, vert is 480
 	f = -.4*cos(encoderAngle);
 //	return f;
 	double dVal = 0;

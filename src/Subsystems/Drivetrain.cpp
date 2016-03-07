@@ -27,6 +27,8 @@ Drivetrain::Drivetrain() : Subsystem("Drivetrain") {
     driveSRX3 = RobotMap::drivetraindriveSRX3;
     driveSRX4 = RobotMap::drivetraindriveSRX4;
     driveTrain = RobotMap::drivetraindriveTrain;
+
+    isInHighGear = false;
 //    powerDistPanel = RobotMap::drivetrainpowerDistPanel;
 //    gearshiftRight = RobotMap::drivetraingearshiftRight;
 //    gearshiftLeft = RobotMap::drivetraingearshiftLeft;
@@ -99,11 +101,13 @@ int Drivetrain::getVelocity(int currentGear) { //should output rpm of fastest mo
 
 void Drivetrain::gearShift(int position) {
 	if (position == 0) {
-	RobotMap::drivetraingearshiftLeft->Set(DoubleSolenoid::kForward);
-	RobotMap::drivetraingearshiftRight->Set(DoubleSolenoid::kForward);
+		isInHighGear = false;
+		RobotMap::drivetraingearshiftLeft->Set(DoubleSolenoid::kForward);
+		RobotMap::drivetraingearshiftRight->Set(DoubleSolenoid::kForward);
 	} else {
-	RobotMap::drivetraingearshiftLeft->Set(DoubleSolenoid::kReverse);
-	RobotMap::drivetraingearshiftRight->Set(DoubleSolenoid::kReverse);
+		isInHighGear = true;
+		RobotMap::drivetraingearshiftLeft->Set(DoubleSolenoid::kReverse);
+		RobotMap::drivetraingearshiftRight->Set(DoubleSolenoid::kReverse);
 	}
 }
 void Drivetrain::autoShift() {

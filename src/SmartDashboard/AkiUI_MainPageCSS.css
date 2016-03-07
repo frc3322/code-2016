@@ -10,7 +10,9 @@
 .Timers{
     color:black;
 }
-
+#webcam-a {
+ transform: rotate(180deg);
+}
 .buttonactive{
     text-shadow:0 1px 0 #fff;
     background-image:-webkit-linear-gradient(top,#fff 0,#3ECCFB 100%);

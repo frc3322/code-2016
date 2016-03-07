@@ -59,6 +59,8 @@ public:
 	void resetIntake();
 	void toggleIntakeOff();
 	void resetShoot();
+	void LogHTMLDashboardValues();
+
 	CameraServer returnCam();
 
 	std::shared_ptr<AHRS> ahrs;

@@ -8,8 +8,28 @@
 	font-size: 24px;
 }
 
-.camera-content img {
-	float: center;
+#webcam {
+	 position: relative;
+	 left: 0px;
+	 top: 0px;
+}
+
+#webcam-a {
+	 position: relative;
+	 left: 0px;
+	 top: 0px;
+}
+
+#crosshair {
+	position: absolute;
+	left: 268px;
+	top: 176px;
+}
+
+#crosshair-a {
+	position: absolute;
+	left: 65px;
+	top: 30px;
 }
 
 input::-webkit-outer-spin-button,

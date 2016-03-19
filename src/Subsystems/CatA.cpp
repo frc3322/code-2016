@@ -30,11 +30,27 @@ void CatA::init(){
 	catA2->Enable();
 	catA2->SetEncPosition(0);
 }
+
+/*void CatA::setPosition(int setpoint,float p,float i,float d,float f){
+
+//	RobotMap::intakeEncoder->Reset();
+	catA1->SetPID(p,i,d,f);
+	catA2->SetPID(p,i,d,f);
+	catA1->Enable();
+	catA2->Enable();
+	catA1->SetSetpoint(setpoint);
+	catA2->SetSetpoint(setpoint);
+}*/
+
 void CatA::chivelDeFrise(){
-	catA2->Set(CatA::calculatePID(0,catA2->GetEncPosition(),.02,0,.08));   //1350, 480
+	//catA2->Set(CatA::calculatePID(0,catA2->GetEncPosition(),.02,0,.08));   //1350, 480
+	if (Robot::catA_Moving) {
+		CatA::initPID(0, catA2->GetEncPosition());
+	}
+	catA2->Set(computePID(0, catA2->GetEncPosition(), .02, 0, .08, 0)); //need to test values
 }
 void CatA::portcollisInit(){
-	catA2->Set(CatA::calculatePID(0,catA2->GetEncPosition(),.02,0,.08));
+	catA2->Set(calculatePID(0,catA2->GetEncPosition(),.02,0,.08));
 
 }
 void CatA::portcollisLift(){
@@ -51,7 +67,7 @@ void CatA::stop() {
 	catA2->Set(0);
 }
 
-double CatA::calculatePID(double setpoint, double current, double Kp, double Ki, double Kd){
+/* double CatA::calculatePID(double setpoint, double current, double Kp, double Ki, double Kd){
 	int dir = 1; //flip sign to change direction
 	const float horPos = 282.5;
 	double encoderAngle = (dir*horPos-current)*(3.1415/2)/(182.75);  //horizontal is 1350, vert is 480
@@ -69,6 +85,20 @@ double CatA::calculatePID(double setpoint, double current, double Kp, double Ki,
 	previous = current;
 	return (Kp*(setpoint-current) + f)+(iVal*Ki)+-dVal;
 
+} */
+
+void CatA::initPID(double setpoint, double encPos) {
+	iTerm = 0;
+	lastError = setpoint - encPos;
+}
+double CatA::computePID(double setpoint, double encPos, double kP, double kI, double kD, double decay) {
+		double error = setpoint - encPos; //assuming 200 is where robot starts
+        double pTerm = error * kP;
+        iTerm = iTerm * decay + error * kI;
+        double dTerm = (lastError - error) * kD;
+        lastError = error;
+        double power = pTerm + iTerm + dTerm;
+        return power;
 }
 
 void CatA::InitDefaultCommand() {

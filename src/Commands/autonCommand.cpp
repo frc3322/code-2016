@@ -27,24 +27,45 @@ autonCommand::autonCommand(): Command() {
 void autonCommand::Initialize() {
 	firstTime=true;
 	autonNumber = SmartDashboard::GetNumber("Auton Number: ",1);
+	startTime = Timer::GetFPGATimestamp();
+
 }
 
 // Called repeatedly when this Command is scheduled to run
 void autonCommand::Execute() {
-//	Robot::drivetrain->driveToAngle(-.3,0);
-	if(firstTime){
-		startTime = Timer::GetFPGATimestamp();
-		firstTime = false;
-	}
 	switch(autonNumber){
 	case 1:
+		//portcullis
 		auton1();
 		break;
 	case 2:
+		//chivel de frise
 		auton2();
+		break;
+	case 3:
+		//rough terrain
+		auton3();
+		break;
+	case 4:
+		//moat
+		auton4();
+		break;
+	case 5:
+		//low bar simple
+		auton5();
+		break;
+	case 6:
+		//low bar with shot
+		break;
+	case 7:
+		//do nothing
+		break;
+	case 8:
+		//reach
 		break;
 	default:
 		auton1();
+		break;
 	}
 
 //	Robot::drivetrain->driveSRX3->Set(.3);
@@ -66,24 +87,58 @@ void autonCommand::Interrupted() {
 
 }
 void autonCommand::auton1(){
+	//portcullis
 	if(Timer::GetFPGATimestamp()<startTime+3){
-		Robot::drivetrain->getDrive()->ArcadeDrive(-.5,.03*RobotMap::ahrs->GetYaw());
+		Robot::drivetrain->getDrive()->ArcadeDrive(-.5,-.03*RobotMap::ahrs->GetYaw());
 		Robot::catA->lower();
 	}
 	else if(Timer::GetFPGATimestamp()<startTime+5){
 		Robot::catA->stop();
-		Robot::drivetrain->getDrive()->ArcadeDrive(-.8,.03*RobotMap::ahrs->GetYaw());
+		Robot::drivetrain->driveToAngle(-.8,0);
+//		Robot::drivetrain->getDrive()->ArcadeDrive(-.8,-.03*RobotMap::ahrs->GetYaw());
 	}
 
 	else {
-		Robot::drivetrain->getDrive()->ArcadeDrive(-.5,.03*RobotMap::ahrs->GetYaw());
+		Robot::drivetrain->driveToAngle(-.5,0);
+//		Robot::drivetrain->getDrive()->ArcadeDrive(-.5,-.03*RobotMap::ahrs->GetYaw());
 	}
 }
 void autonCommand::auton2(){
 	//chivel de frise
+	//need to set Cat. A at correct position using PID, then drive forward
 }
 void autonCommand::auton3(){
+	//rough terrain
+	Robot::drivetrain->driveToAngle(-0.6,0);
 
 }
 void autonCommand::auton4(){
+	//moat
+	Robot::drivetrain->driveToAngle(-0.6,0);
+}
+void autonCommand::auton5(){
+	//low bar no shot
+	if(Timer::GetFPGATimestamp()<startTime+2){
+	Robot::catA->lower();
+	Robot::intake->holdBall();
+	}
+	else if(Timer::GetFPGATimestamp()<startTime+4){
+	Robot::catA->stop();
+	Robot::intake->intakeRotateTalon1->Set(0);
+	}
+	else{
+		Robot::drivetrain->driveToAngle(-.5,0);
+	}
+}
+void autonCommand::auton6(){
+	//low bar with shot (unlikely to be done before vision targeting happens
+}
+void autonCommand::auton7(){
+	//do nothing...something is probably very broken :-(
+}
+void autonCommand::auton8(){
+	//REACH any defense
+	if(Timer::GetFPGATimestamp()<startTime+5){
+		Robot::drivetrain->driveToAngle(-.5,0);
+	}
 }

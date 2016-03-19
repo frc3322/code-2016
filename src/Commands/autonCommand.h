@@ -38,6 +38,10 @@ public:
 	void auton2();
 	void auton3();
 	void auton4();
+	void auton5();
+	void auton6();
+	void auton7();
+	void auton8();
 	int autonState;
 	float encoderValue;
 	float angleToTarget;

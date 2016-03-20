@@ -64,7 +64,7 @@ void autonCommand::Execute() {
 		//reach
 		break;
 	default:
-		auton1();
+		auton3();
 		break;
 	}
 
@@ -87,19 +87,21 @@ void autonCommand::Interrupted() {
 
 }
 void autonCommand::auton1(){
-	//portcullis
+	//portcullis.  Tested and works on home field.
 	if(Timer::GetFPGATimestamp()<startTime+3){
-		Robot::drivetrain->getDrive()->ArcadeDrive(-.5,-.03*RobotMap::ahrs->GetYaw());
+//		Robot::drivetrain->getDrive()->ArcadeDrive(-.5,-.03*RobotMap::ahrs->GetYaw());
+		Robot::drivetrain->driveToAngle(-.65,0);
 		Robot::catA->lower();
 	}
 	else if(Timer::GetFPGATimestamp()<startTime+5){
-		Robot::catA->stop();
+		Robot::catA->lower(); //make sure it stays low enough
 		Robot::drivetrain->driveToAngle(-.8,0);
 //		Robot::drivetrain->getDrive()->ArcadeDrive(-.8,-.03*RobotMap::ahrs->GetYaw());
 	}
 
 	else {
-		Robot::drivetrain->driveToAngle(-.5,0);
+		Robot::drivetrain->driveToAngle(-.8,0);
+		Robot::catA->stop(); //reduce motor strain
 //		Robot::drivetrain->getDrive()->ArcadeDrive(-.5,-.03*RobotMap::ahrs->GetYaw());
 	}
 }
@@ -108,9 +110,16 @@ void autonCommand::auton2(){
 	//need to set Cat. A at correct position using PID, then drive forward
 }
 void autonCommand::auton3(){
-	//rough terrain
-	Robot::drivetrain->driveToAngle(-0.6,0);
-
+	//rough terrain.  Tested and works on home field.
+	if(Timer::GetFPGATimestamp()<startTime+3){
+		Robot::drivetrain->driveToAngle(-0.6,0);
+	}
+	else if(Timer::GetFPGATimestamp()<startTime+5){
+		Robot::drivetrain->driveToAngle(-1,0);
+	}
+	else{
+		Robot::drivetrain->driveToAngle(-.4,0); //slightly reduced speed here.  Beware of waggle!
+	}
 }
 void autonCommand::auton4(){
 	//moat
@@ -119,19 +128,19 @@ void autonCommand::auton4(){
 void autonCommand::auton5(){
 	//low bar no shot
 	if(Timer::GetFPGATimestamp()<startTime+2){
-	Robot::catA->lower();
-	Robot::intake->holdBall();
+		Robot::catA->lower();
+		Robot::intake->holdBall();
 	}
 	else if(Timer::GetFPGATimestamp()<startTime+4){
-	Robot::catA->stop();
-	Robot::intake->intakeRotateTalon1->Set(0);
+		Robot::catA->stop();
+		Robot::intake->intakeRotateTalon1->Set(0);
 	}
 	else{
 		Robot::drivetrain->driveToAngle(-.5,0);
 	}
 }
 void autonCommand::auton6(){
-	//low bar with shot (unlikely to be done before vision targeting happens
+	//low bar with shot (unlikely to be done before vision targeting happens)
 }
 void autonCommand::auton7(){
 	//do nothing...something is probably very broken :-(

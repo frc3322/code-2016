@@ -60,7 +60,7 @@ void Drivetrain::EnableSRX(){
 
 float Drivetrain::driveToAngle(float velocity,float targetAngle){
 	double turnAngle = angleToTurn(RobotMap::ahrs->GetYaw(),targetAngle);
-	driveTrain->ArcadeDrive(velocity,-kP*(RobotMap::ahrs->GetYaw()-targetAngle));
+	driveTrain->ArcadeDrive(velocity,Drivetrain::calculatePID(0,-RobotMap::ahrs->GetYaw(),0.3,.1,0));
 //	driveTrain->ArcadeDrive(velocity,-kP * turnAngle);
 //	driveTrain->ArcadeDrive(.1,0,0);
 //	driveTrain->Drive(.3,0);
@@ -120,4 +120,24 @@ void Drivetrain::autoShift() {
 			gearShift(1);
 			currentGear = 1;
 		}
+}
+double Drivetrain::calculatePID(double setpoint, double current, double Kp, double Ki, double Kd){
+	double encoderAngle = (-285.5-current)*(3.1415/2)/(-182.75);
+//	printf("encoder angle %f",encoderAngle);
+	f = .4*cos(encoderAngle);
+
+	double dVal = 0;
+	Ki = 0.0000;
+	double iVal = previousIVal + (double)setpoint-(double)current;
+//	printf("IVal %f",iVal);
+	if(previous != 0){
+		dVal = ((double)current-(double)previous)*Kd;
+//		printf("Dval %f",dVal);
+	}
+	previousIVal = iVal;
+	previous = current;
+//	return f;
+
+	return (Kp*(setpoint-current) + f)+(iVal*Ki)+-dVal; //there used to be an f term here. maybe that's why its jittery?
+
 }

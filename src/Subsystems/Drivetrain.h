@@ -59,7 +59,7 @@ public:
 
 	void Schneyer();
 
-	constexpr static double kP = 0.30f;
+	constexpr static double kP = 0.28f;
 	constexpr static double kI = 0.00f;
 	constexpr static double kD = 0.00f;
 	constexpr static double kF = 0.00f;
@@ -75,7 +75,14 @@ public:
 	double provisionalAngle;
 	double targetAngle;
 	double currentAngle;
-
+	double calculatePID(double setpoint, double current, double p, double i, double d);
+	double iVal = 0;
+	double previousIVal = 0;
+	double f;
+	double pi = 3.1415;
+	double previous = 0;
+	double maxEncoder = 0;
+	double previousError = 0;
 
 };
 

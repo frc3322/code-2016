@@ -42,8 +42,8 @@ void CatA::portcollisLift(){
 }
 
 void CatA::lower() {
-	catA1->Set(.5);
-	catA2->Set(-.5);
+	catA1->Set(.3);
+	catA2->Set(-.3);
 }
 
 void CatA::stop() {

@@ -37,6 +37,7 @@ std::shared_ptr<PIDController> RobotMap::intakePID;
 std::shared_ptr<Encoder> RobotMap::intakeEncoder;
 std::shared_ptr<PIDController> RobotMap::catAPID;
 std::shared_ptr<Encoder> RobotMap::catAEncoder;
+std::shared_ptr<Potentiometer> RobotMap::pot;
 
 
 void RobotMap::init() {
@@ -107,7 +108,7 @@ void RobotMap::init() {
     catAPID.reset(new PIDController(2,0.0,0.0,catAEncoder.get(),catACatA1.get()));
     catAPID->SetContinuous(false);
     catAPID->SetOutputRange(-1.0,1.0);
-
+    pot.reset(new AnalogPotentiometer(0,100,0));
 //    drivetraindriveSRX1->SetInverted(true);
 //    drivetraindriveSRX2->SetInverted(true);
 }

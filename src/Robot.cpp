@@ -98,6 +98,7 @@ void Robot::DisabledPeriodic() {
 	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::ABUTTON)){
 		RobotMap::intakeEncoder->Reset();
 	}
+	SmartDashboard::PutNumber("pot",RobotMap::pot->Get());
 	Robot::LogNavXValues();
 	SmartDashboard::PutNumber("ticks ",Robot::shooter->shooterFrontTalon->GetEncPosition());
 	SmartDashboard::PutNumber("Category A ticks",Robot::catA->catA2->GetEncPosition());

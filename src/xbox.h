@@ -11,6 +11,7 @@ const unsigned int
 	BACK = 7,    //in use
 	START = 8,   //in use
 	LSTICKP = 9, //in use
+	RSTICKP = 10,
 	DPADVERT = 7,
 	DPADSIDE = 6;
 }

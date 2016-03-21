@@ -164,39 +164,15 @@ void Robot::TeleopPeriodic() {
 	cycleStartTime = Timer::GetFPGATimestamp();
 	//slaving the second rotate talon
 	Robot::intake->intakeRotateTalon2->Set(3);
-	//ahrs (NavX) testing.  Should be disabled / commented out during competitions to reduce overhead
-//	Robot::LogNavXValues();
-
+	//SmartDashboard
 	SmartDashboard::PutNumber("encoder dist",RobotMap::intakeEncoder->GetDistance());
 	SmartDashboard::PutNumber("vel",Robot::shooter->returnVel());
-//	Robot::drivetrain->driveToAngle(Robot::oi->gettechStick()->GetY());
-	Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetY(),-1*Robot::oi->getdriveStick()->GetRawAxis(4),true);
 
 
-	if(Robot::oi->gettechStick()->GetRawButton(XBOX::LBUMPER)){
-		Robot::intake->takeBallIn();
-	}
-/*	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER)){
-		Robot::catA->catA1->Set(-.5);
-		Robot::catA->catA2->Set(.5);
-	}
-	else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER)){
-		Robot::catA->catA1->Set(.5);
-		Robot::catA->catA2->Set(-.5);
-	}
-	else{
-		Robot::catA->catA1->Set(0);
-		Robot::catA->catA2->Set(0);
-	}*/
-//	prevRBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER);
-//	prevLBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER);
-//	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BACK)){
-//		Robot::shooter->testPID(256*1200);
-//	}
-//	else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::START)){
-//		Robot::shooter->stopShooter();
-//	}
-
+	//driver controls
+	//drive code
+		Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetY(),-1*Robot::oi->getdriveStick()->GetRawAxis(4),true);
+	//gearshifting
 	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::ABUTTON)){
 		Robot::drivetrain->gearShift(1);
 	}
@@ -204,6 +180,23 @@ void Robot::TeleopPeriodic() {
 		Robot::drivetrain->gearShift(0);
 	}
 
+	/*	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER)){
+			Robot::catA->catA1->Set(-.5);
+			Robot::catA->catA2->Set(.5);
+		}
+		else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER)){
+			Robot::catA->catA1->Set(.5);
+			Robot::catA->catA2->Set(-.5);
+		}
+		else{
+			Robot::catA->catA1->Set(0);
+			Robot::catA->catA2->Set(0);
+	}*/
+
+	//tech controls
+	if(Robot::oi->gettechStick()->GetRawButton(XBOX::LBUMPER)){
+		Robot::intake->takeBallIn();
+	}
 	if(Robot::oi->gettechStick()->GetRawButton(XBOX::RBUMPER)){
 		holdingBall = false;
 		loadingBall = false;
@@ -240,6 +233,7 @@ void Robot::TeleopPeriodic() {
 		Robot::intake->loadingBall(cycleStartTime);
 		loadStartTime = cycleStartTime;
 	}
+
 	if(Robot::intake->intakeDone){
 		resetIntake();
 	}
@@ -263,11 +257,6 @@ void Robot::TeleopPeriodic() {
 		isFirstGather = true;
 		RobotMap::intakeEncoder->Reset();
 	}
-//	if(Robot::oi->gettechStick()->GetRawButton(XBOX::BACK) || secondaryHold){
-//		Robot::resetIntake();
-//		Robot::intake->intakeRotateTalon1->Set(Robot::intake->calculatePID(122,RobotMap::intakeEncoder->Get(),.02,0,.08));
-//		Robot::secondaryHold = true;
-//	}
 	if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADSIDE) == 1){ //check return values for all dpad
 		Robot::catA->chivelDeFrise();
 	} else if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADVERT) == 0) { //should be down on DPADVERT
@@ -275,7 +264,23 @@ void Robot::TeleopPeriodic() {
 	} else if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADVERT) == 1) { //should be up on DPADVERT
 		Robot::catA->portcollisLift();
 	}
+	//cat. A PID
 	Robot::catA->moveArm();
+
+//	prevRBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER);
+//	prevLBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER);
+//	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BACK)){
+//		Robot::shooter->testPID(256*1200);
+//	}
+//	else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::START)){
+//		Robot::shooter->stopShooter();
+//	}
+
+//	if(Robot::oi->gettechStick()->GetRawButton(XBOX::BACK) || secondaryHold){
+//		Robot::resetIntake();
+//		Robot::intake->intakeRotateTalon1->Set(Robot::intake->calculatePID(122,RobotMap::intakeEncoder->Get(),.02,0,.08));
+//		Robot::secondaryHold = true;
+//	}
 }
 
 

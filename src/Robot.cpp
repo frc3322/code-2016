@@ -144,6 +144,7 @@ void Robot::TeleopInit() {
 	RobotMap::intakeEncoder->Reset();
 	SmartDashboard::PutNumber("thing happened! ",0);
 	Robot::ahrs->ZeroYaw();
+	Robot::catA->initPID();
 }
 
 void Robot::LogNavXValues(){
@@ -175,7 +176,7 @@ void Robot::TeleopPeriodic() {
 	if(Robot::oi->gettechStick()->GetRawButton(XBOX::LBUMPER)){
 		Robot::intake->takeBallIn();
 	}
-	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER)){
+/*	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER)){
 		Robot::catA->catA1->Set(-.5);
 		Robot::catA->catA2->Set(.5);
 	}
@@ -186,7 +187,7 @@ void Robot::TeleopPeriodic() {
 	else{
 		Robot::catA->catA1->Set(0);
 		Robot::catA->catA2->Set(0);
-	}
+	}*/
 //	prevRBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER);
 //	prevLBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER);
 //	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BACK)){
@@ -267,9 +268,14 @@ void Robot::TeleopPeriodic() {
 //		Robot::intake->intakeRotateTalon1->Set(Robot::intake->calculatePID(122,RobotMap::intakeEncoder->Get(),.02,0,.08));
 //		Robot::secondaryHold = true;
 //	}
-//	if(Robot::oi->gettechStick()->GetRawButton(XBOX::BACK)){
-//		Robot::catA->chivelDeFrise();
-//	}
+	if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADSIDE) == 1){ //check return values for all dpad
+		Robot::catA->chivelDeFrise();
+	} else if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADVERT) == 0) { //should be down on DPADVERT
+		Robot::catA->portcollisInit();
+	} else if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADVERT) == 1) { //should be up on DPADVERT
+		Robot::catA->portcollisLift();
+	}
+	Robot::catA->moveArm();
 }
 
 

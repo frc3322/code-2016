@@ -1,8 +1,17 @@
 #ifndef __XBOX_H_
 #define __XBOX_H_
 namespace XBOX {
-const unsigned int ABUTTON = 1, BBUTTON = 2, XBUTTON = 3, YBUTTON = 4,
-		LBUMPER = 5, RBUMPER = 6, BACK = 7, START = 8,
-		LSTICKP = 9, RSTICKP = 10, DPADVERT = 7, DPADSIDE = 6;
+const unsigned int
+	ABUTTON = 1, //in use
+	BBUTTON = 2, //in use
+	XBUTTON = 3, //in use
+	YBUTTON = 4, //in use
+	LBUMPER = 5, //in use
+	RBUMPER = 6, //in use
+	BACK = 7,    //in use
+	START = 8,   //in use
+	LSTICKP = 9, //in use
+	DPADVERT = 7,
+	DPADSIDE = 6;
 }
 #endif

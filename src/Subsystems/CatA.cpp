@@ -48,7 +48,7 @@ void CatA::init(){
 
 
 void CatA::moveArm() {
-	catA2->Set(computePID(setpoint, catA2->GetEncPosition(), .02, 0, .08, 0)); //test PID values
+	catA2->Set(computePID(setpoint,RobotMap::pot->Get(), .02, 0, .08, 0)); //test PID values
 }
 
 void CatA::chivelDeFrise(){
@@ -78,8 +78,8 @@ void CatA::initPID() {
 	iTerm = 0;
 	lastError = setpoint - catA2->GetEncPosition();
 }
-double CatA::computePID(double target, double encPos, double kP, double kI, double kD, double decay) {
-		double error = target - encPos; //assuming 200 is where robot starts
+double CatA::computePID(double target, double potPos, double kP, double kI, double kD, double decay) {
+		double error = target - potPos; //assuming 200 is where robot starts
         double pTerm = error * kP;
         iTerm = iTerm * decay + error * kI;
         double dTerm = (lastError - error) * kD;

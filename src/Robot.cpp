@@ -257,15 +257,17 @@ void Robot::TeleopPeriodic() {
 		isFirstGather = true;
 		RobotMap::intakeEncoder->Reset();
 	}
-	if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADSIDE) == 1){ //check return values for all dpad
+/*	if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADSIDE) == 1){ //check return values for all dpad
 		Robot::catA->chivelDeFrise();
 	} else if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADVERT) == 0) { //should be down on DPADVERT
 		Robot::catA->portcollisInit();
 	} else if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADVERT) == 1) { //should be up on DPADVERT
 		Robot::catA->portcollisLift();
-	}
+	}*/
+	SmartDashboard::PutNumber("DPADVERT", Robot::oi->getdriveStick()->GetRawAxis(XBOX::DPADVERT));
+	SmartDashboard::PutNumber("DPADSIDE", Robot::oi->getdriveStick()->GetRawAxis(XBOX::DPADSIDE));
 	//cat. A PID
-	Robot::catA->moveArm();
+	//Robot::catA->moveArm();
 
 //	prevRBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER);
 //	prevLBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER);

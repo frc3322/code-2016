@@ -48,20 +48,20 @@ void CatA::init(){
 
 
 void CatA::moveArm() {
-	catA2->Set(computePID(setpoint,RobotMap::pot->Get(), .02, 0, .08, 0)); //test PID values
+	catA2->Set(computePID(setpoint,RobotMap::pot->Get(), 1, 0, 0, 0)); //test PID values
 }
 
 void CatA::chivelDeFrise(){
 	//catA2->Set(CatA::calculatePID(0,catA2->GetEncPosition(),.02,0,.08));   //1350, 480
-	setpoint = 1350; //change as needed, approximated to be right above the chivel de frise
+	setpoint = 100; //change as needed, approximated to be right above the chivel de frise
 }
 
 void CatA::portcollisInit(){
-	setpoint = 5000; //change as needed, approximated to be right above the carpet
+	setpoint = 50; //change as needed, approximated to be right above the carpet
 }
 
 void CatA::portcollisLift(){
-	setpoint = 200; //change as needed, approximated to be raised as high as possible w/out hitting robot
+	setpoint = 0; //change as needed, approximated to be raised as high as possible w/out hitting robot
 }
 
 void CatA::lower() {

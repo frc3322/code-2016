@@ -264,8 +264,10 @@ void Robot::TeleopPeriodic() {
 	} else if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADVERT) == 1) { //should be up on DPADVERT
 		Robot::catA->portcollisLift();
 	}*/
-	SmartDashboard::PutNumber("DPADVERT", Robot::oi->getdriveStick()->GetRawAxis(XBOX::DPADVERT));
-	SmartDashboard::PutNumber("DPADSIDE", Robot::oi->getdriveStick()->GetRawAxis(XBOX::DPADSIDE));
+	SmartDashboard::PutNumber("XBUTTON", Robot::oi->getdriveStick()->GetRawButton(XBOX::XBUTTON));
+	SmartDashboard::PutNumber("YBUTTON", Robot::oi->getdriveStick()->GetRawButton(XBOX::YBUTTON));
+	SmartDashboard::PutNumber("BBUTTON", Robot::oi->getdriveStick()->GetRawButton(XBOX::BBUTTON));
+	Robot::oi->gettechStick()->GetRawButton(XBOX::ABUTTON);
 	//cat. A PID
 	//Robot::catA->moveArm();
 

@@ -45,7 +45,7 @@
 								</option>
 								<option id="gnu.cpp.link.option.paths.1566479969" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${WPILIB}/cpp/current/lib&quot;"/>
-									<listOptionValue builtIn="false" value="\navx-mxp\cpp\lib"/>
+									<listOptionValue builtIn="false" value="${HOME}/navx-mxp/cpp/lib"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.675338432" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-rpath,/opt/GenICam_v2_3/bin/Linux_armv7-a,-rpath,/usr/local/frc/rpath-lib" valueType="string"/>
 								<option id="gnu.cpp.link.option.other.265065367" name="Other options (-Xlinker [option])" superClass="gnu.cpp.link.option.other"/>
@@ -153,4 +153,5 @@
 			<resource resourceType="PROJECT" workspacePath="/robot-code-2016"/>
 		</configuration>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>

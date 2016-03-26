@@ -35,55 +35,35 @@
 	</div>
 	-->
 	<div class="camera-content">
-		<span> Camera </span>
+		<span> Camera - 3322 Eagle Imperium</span>
 		<div style="position: relative; left: 0; top=0;">
 			<img id="webcam" width=640 height=480 src="Resources/CamFeedOffline.png"/>
 			<script>
 				document.getElementById("webcam").src = Config.webcam+"/?action=stream"
 			</script>
 			<img id="crosshair" width=128 height=128 src="Resources/Crosshairs.png"/>
-			<span> 3322 Eagle Imperium </span>
 		</div>
 	</div>
 </div>
 
 <div class="MainDivide" id="RobotDiagram">
 	<div>
-		<span class="font-eagle">Speed </span>
-		<input type="number" name="robot-speed" id="speed" step="0" max="1.0" min="-1.0"/><br/>
-	</div>
-	<div>
-		<span class="font-eagle">Direction </span>
-		<input type="text" name="robot-direction" id="direction"/> <br/>
-	</div>
-	<br/><br/>
-	<div>
 		<span class="font-eagle">Load Speed </span>
-		<input type="number" name="loader" id="load-speed" step="0" max="1.0" min="-1.0"/><br/>
+		<input type="number" name="loader" id="load-speed" step="0"/><br/>
 	</div>
 	<div>
 		<span class="font-eagle">Shoot Speed </span>
-		<input type="number" name="shooter" id="shoot-speed" step="0" max="1.0" min="-1.0"/> <br/>
+		<input type="number" name="shooter" id="shoot-speed" step="0"/> <br/>
 	</div>
 	<div>
 		<span class="font-eagle">Arm Angle </span>
-		<input type="number" name="armangle" id="arm-angle" step="0" max="1.0" min="-1.0"/> <br/>
+		<input type="number" name="armangle" id="arm-angle" step="0"/> <br/>
 	</div>
-	<div>
-		<span class="font-eagle">Use Intake PID </span>
-		<form action="">
-			<input type="radio" name="intakepid" id="intake-pid-on" value="On" color="black"> On<br>
-			<input type="radio" name="intakepid" id="intake-pid-off" value="Off"> Off<br>
-		</form>
-	</div>
-	<br/><br/>
-	<div>
-		<span class="font-eagle">Gatherer Encoder </span>
-		<input type="number" name="encoder1" id="encoder-1" step="0" max="1.0" min="-1.0"/> <br/>
-	</div>
-	<div>
-		<span class="font-eagle">Cat A Encoder </span>
-		<input type="number" name="encoder2" id="encoder-2" step="0" max="1.0" min="-1.0"/> <br/>
+	<div style="position: relative; left: 0; top: 0;">
+		<img id="img-gyro" width=180 height=180 src="Resources/Gyro.png"/>
+		<img id="needle" width=180 height=180 src="Resources/needle.png"/><br/><br/>
+		<span class="font-eagle">Gyro Angle </span>
+		<input type="number" name="gyroangle" id="gyro-angle" step="0"/> <br/>
 	</div>
 	<div style="position: relative; left: 0; top: 0;">
 		<img id="webcam-a" width=256 height=196 src="Resources/CamFeedOffline.png"/>
@@ -96,22 +76,40 @@
 
 <div class="MainDivide" id="AutoBox">
 
-	<input type="text" name="robot-connection" readonly id="connection"/><br/>
+	<input type="text" name="robot-connection" readonly id="connection"/>
 	<input type="text" name="robot-gear" readonly id="robot-gear"/><br/>
-	<br/><br/>
 	<input type="text" name="robot-mode" id="auton-mode"/><br/>
 	<script>
 		NetworkTables.setValue('/SmartDashboard/useIntake', true, false);
 		document.getElementById("auton-mode").style.color = "black";
-		document.getElementById("auton-mode").style.fontSize = "24px";
+		document.getElementById("auton-mode").style.fontSize = "16px";
+		
 		$('#auton-mode').val("None")
 	</script>
 		
 	<form action="">
-		<input type="radio" name="autonmode" id="auton-none" value="None"> None<br>
-		<input type="radio" name="autonmode" id="auton-lowbar" value="Low Bar"> Low Bar<br>
+		<input type="radio" name="auton" id="auton-1"> Portcullis<br>
+		<input type="radio" name="auton" id="auton-2"> Chivel de Frise<br>
+		<input type="radio" name="auton" id="auton-3"> Rough Terrain<br>
+		<input type="radio" name="auton" id="auton-4"> Moat<br>
+		<input type="radio" name="auton" id="auton-5"> Low Bar Simple<br>
+		<input type="radio" name="auton" id="auton-6"> Low Bar Shot<br>
+		<input type="radio" name="auton" id="auton-7"> Do Nothing<br>
+		<input type="radio" name="auton" id="auton-8"> Reach<br>
+		
 	</form>
-	<img id="eaglelogo" width=100 height=100 src="Resources/3322-eagle.png" />	
+	<div id="faults-list">
+		<input type="text" id="faults-1"/><br/>
+		<input type="text" id="faults-2"/><br/>
+		<input type="text" id="faults-3"/><br/>
+		<input type="text" id="faults-4"/><br/>
+		<input type="text" id="faults-5"/><br/>
+		<input type="text" id="faults-6"/><br/>
+		<input type="text" id="faults-7"/><br/>
+		<input type="text" id="faults-8"/><br/>
+		<input type="text" id="faults-9"/><br/>
+		<input type="text" id="faults-10"/><br/>
+	</div>
 </div>
 
 <script type="text/javascript">
@@ -194,7 +192,7 @@ function onRobotConnection(connected) {
 	console.log("Robot connected: " + connected);
 
 	// make sure the camera stream isn't connected until the robot connects to us
-		document.getElementById("connection").style.fontSize = "24px"
+		document.getElementById("connection").style.fontSize = "16px"
 	if (connected) {
 		document.getElementById("connection").style.color = "green"
 	} else {

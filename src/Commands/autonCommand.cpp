@@ -107,7 +107,15 @@ void autonCommand::auton1(){
 }
 void autonCommand::auton2(){
 	//chivel de frise
-	//need to set Cat. A at correct position using PID, then drive forward
+	if(Timer::GetFPGATimestamp()<startTime+2){
+		Robot::drivetrain->driveToAngle(-.5,0);
+		Robot::catA->chivelDeFrise();
+		Robot::catA->moveArm();
+	}
+	else if(Timer::GetFPGATimestamp()<startTime+10){
+		Robot::drivetrain->driveToAngle(-.85,0);
+		Robot::catA->moveArm();
+	}
 }
 void autonCommand::auton3(){
 	//rough terrain.  Tested and works on home field.

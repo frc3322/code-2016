@@ -60,7 +60,7 @@ void Drivetrain::EnableSRX(){
 
 float Drivetrain::driveToAngle(float velocity,float targetAngle){
 	double turnAngle = angleToTurn(RobotMap::ahrs->GetYaw(),targetAngle);
-	driveTrain->ArcadeDrive(velocity,Drivetrain::calculatePID(0,-RobotMap::ahrs->GetYaw(),0.3,.1,0));
+	driveTrain->ArcadeDrive(velocity,Drivetrain::calculatePID(0,-RobotMap::ahrs->GetYaw(),0.3,.06,0));
 //	driveTrain->ArcadeDrive(velocity,-kP * turnAngle);
 //	driveTrain->ArcadeDrive(.1,0,0);
 //	driveTrain->Drive(.3,0);

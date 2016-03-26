@@ -70,11 +70,11 @@ void CatA::moveArm() {
 
 void CatA::chivelDeFrise(){
 	//catA2->Set(CatA::calculatePID(0,catA2->GetEncPosition(),.02,0,.08));   //1350, 480
-	setpoint = 600; //change as needed, approximated to be right above the chivel de frise
+	setpoint = 592; //change as needed, approximated to be right above the chivel de frise
 }
 
 void CatA::portcollisInit(){
-	setpoint = 658; //change as needed, approximated to be right above the carpet
+	setpoint = 580; //change as needed, approximated to be right above the carpet
 }
 
 void CatA::portcollisLift(){

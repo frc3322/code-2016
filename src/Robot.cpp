@@ -52,6 +52,10 @@ void Robot::RobotInit() {
 	Robot::intake->init();
 	RobotMap::ahrs->ZeroYaw();
 //	CameraServer::GetInstance()->StartAutomaticCapture("cam0");
+	SmartDashboard::PutNumber("P",.1);
+	SmartDashboard::PutNumber("I", 0);
+	SmartDashboard::PutNumber("D", .1);
+	SmartDashboard::PutNumber("Decay", 0);
 }
 
 void clearStickyFaults() {
@@ -144,7 +148,9 @@ void Robot::TeleopInit() {
 	RobotMap::intakeEncoder->Reset();
 	SmartDashboard::PutNumber("thing happened! ",0);
 	Robot::ahrs->ZeroYaw();
+	Robot::catA->portcollisLift();
 	Robot::catA->initPID();
+	Robot::catA->armPosinit();
 }
 
 void Robot::LogNavXValues(){
@@ -257,19 +263,19 @@ void Robot::TeleopPeriodic() {
 		isFirstGather = true;
 		RobotMap::intakeEncoder->Reset();
 	}
-/*	if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADSIDE) == 1){ //check return values for all dpad
+	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::YBUTTON)){
 		Robot::catA->chivelDeFrise();
-	} else if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADVERT) == 0) { //should be down on DPADVERT
+	} else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::XBUTTON)) {
 		Robot::catA->portcollisInit();
-	} else if(Robot::oi->gettechStick()->GetRawButton(XBOX::DPADVERT) == 1) { //should be up on DPADVERT
+	} else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BBUTTON)) {
 		Robot::catA->portcollisLift();
-	}*/
+	}
 	SmartDashboard::PutNumber("XBUTTON", Robot::oi->getdriveStick()->GetRawButton(XBOX::XBUTTON));
 	SmartDashboard::PutNumber("YBUTTON", Robot::oi->getdriveStick()->GetRawButton(XBOX::YBUTTON));
 	SmartDashboard::PutNumber("BBUTTON", Robot::oi->getdriveStick()->GetRawButton(XBOX::BBUTTON));
-	Robot::oi->gettechStick()->GetRawButton(XBOX::ABUTTON);
+	SmartDashboard::PutNumber("CATAPOSITION", Robot::catA->armPos(static_cast<int>(RobotMap::pot->Get())));
 	//cat. A PID
-	//Robot::catA->moveArm();
+	Robot::catA->moveArm();
 
 //	prevRBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER);
 //	prevLBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER);

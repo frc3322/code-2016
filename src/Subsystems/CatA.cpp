@@ -45,23 +45,40 @@ void CatA::init(){
 	catA2->SetSetpoint(setpoint);
 }*/
 
-
+void CatA::armPosinit() {
+	int posArr[5];
+	int replaceArr = 0;
+	for(int i=0; i<5; ++i) {
+		posArr[i] = static_cast<int>(RobotMap::pot->Get());
+	}
+}
+int CatA::armPos(int pos) {
+	posArr[replaceArr] = static_cast<int>(RobotMap::pot->Get()); //bottom = 578, top = 660
+	++replaceArr;
+	replaceArr = replaceArr%5;
+	int armPos = 0;
+	for (int i=0; i<5; i++) {
+		armPos = armPos + posArr[i];
+	}
+	return static_cast<int>(armPos/5);
+}
 
 void CatA::moveArm() {
-	catA2->Set(computePID(setpoint,RobotMap::pot->Get(), 1, 0, 0, 0)); //test PID values
+	catA2->Set(computePID(setpoint, armPos(static_cast<int>(RobotMap::pot->Get())), .05, 0, 0, 0)); //test PID values
+	SmartDashboard::PutNumber("Setpoint", setpoint);
 }
 
 void CatA::chivelDeFrise(){
 	//catA2->Set(CatA::calculatePID(0,catA2->GetEncPosition(),.02,0,.08));   //1350, 480
-	setpoint = 100; //change as needed, approximated to be right above the chivel de frise
+	setpoint = 600; //change as needed, approximated to be right above the chivel de frise
 }
 
 void CatA::portcollisInit(){
-	setpoint = 50; //change as needed, approximated to be right above the carpet
+	setpoint = 658; //change as needed, approximated to be right above the carpet
 }
 
 void CatA::portcollisLift(){
-	setpoint = 0; //change as needed, approximated to be raised as high as possible w/out hitting robot
+	setpoint = 580; //change as needed, approximated to be raised as high as possible w/out hitting robot
 }
 
 void CatA::lower() {

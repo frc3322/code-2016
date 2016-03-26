@@ -110,7 +110,7 @@ void RobotMap::init() {
     catAPID.reset(new PIDController(2,0.0,0.0,catAEncoder.get(),catACatA1.get()));
     catAPID->SetContinuous(false);
     catAPID->SetOutputRange(-1.0,1.0);
-    pot.reset(new AnalogPotentiometer(0,100,0));
+    pot.reset(new AnalogPotentiometer(0,1000,0));
 //    drivetraindriveSRX1->SetInverted(true);
 //    drivetraindriveSRX2->SetInverted(true);
 }

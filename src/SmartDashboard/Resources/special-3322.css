@@ -22,14 +22,14 @@
 
 #crosshair {
 	position: absolute;
-	left: 268px;
-	top: 176px;
+	left: 250px;
+	top: 65px;
 }
 
 #crosshair-a {
 	position: absolute;
-	left: 65px;
-	top: 30px;
+	left: 100px;
+	top: 25px;
 }
 
 #img-gyro {

@@ -57,7 +57,7 @@
   left: 1vw;
   top: 2vh;
 
-  width: 54vw;
+  width: 50vw;
   height: 96vh;
 }
 
@@ -94,10 +94,10 @@
 
 #RobotDiagram{
     position: fixed;
-    left: 55vw;
+    left: 51vw;
     top: 2vh;
     height: 96vh;
-    width: 25vw;
+    width: 29vw;
 
 }
 

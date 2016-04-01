@@ -59,7 +59,7 @@ function getGyro()
 	$("#needle").css("-webkit-transform", "rotate("+angle+"deg)");
 	while (angle < 0)
 		angle += 360;
-	$("#gyro-angle").val(angle % 270);
+	$("#gyro-angle").val(angle % 360);
 }
 
 function getFaults()

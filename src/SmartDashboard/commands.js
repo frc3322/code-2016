@@ -1,43 +1,51 @@
 $(document).ready(function() {
 /* Start of auton; There is something wrong here, I just know it! */
 $('#auton-1').click(function () {
-	NetworkTables.setValue('/SmartDashboard/autonMode', 1, 0)
-	$('#auton-mode').val("Portcullis")
+	NetworkTables.setValue('/SmartDashboard/autonNumber', 1)
+	var V = NetworkTables.getValue('/SmartDashboard/autonNumber', 0)
+	$('#auton-mode').val((V != 0) ? "Portcullis" : "Error!")
     });
 
 $('#auton-2').click(function () {
-	NetworkTables.setValue('/SmartDashboard/autonMode', 2, 0)
-	$('#auton-mode').val("Chivel de Frise")
+	NetworkTables.setValue('/SmartDashboard/autonNumber', 2)
+	var V = NetworkTables.getValue('/SmartDashboard/autonNumber', 0)
+	$('#auton-mode').val((V != 0) ? "Chivel de Frise" : "Error!")
     });
 
 $('#auton-3').click(function () {
-	NetworkTables.setValue('/SmartDashboard/autonMode', 3, 0)
-	$('#auton-mode').val("Rough Terrain")
+	NetworkTables.setValue('/SmartDashboard/autonNumber', 3)
+	var V = NetworkTables.getValue('/SmartDashboard/autonNumber', 0)
+	$('#auton-mode').val((V != 0) ? "Rough Terrain" : "Error!")
     });
 
 $('#auton-4').click(function () {
-	NetworkTables.setValue('/SmartDashboard/autonMode', 4, 0)
-	$('#auton-mode').val("Moat")
+	NetworkTables.setValue('/SmartDashboard/autonNumber', 4)
+	var V = NetworkTables.getValue('/SmartDashboard/autonNumber', 0)
+	$('#auton-mode').val((V != 0) ? "Moat" : "Error!")
     });
 
 $('#auton-5').click(function () {
-	NetworkTables.setValue('/SmartDashboard/autonMode', 5, 0)
-	$('#auton-mode').val("Low Bar Simple")
+	NetworkTables.setValue('/SmartDashboard/autonNumber', 5)
+	var V = NetworkTables.getValue('/SmartDashboard/autonNumber', 0)
+	$('#auton-mode').val((V != 0) ? "Low Bar Simple" : "Error!")
     });
 
 $('#auton-6').click(function () {
-	NetworkTables.setValue('/SmartDashboard/autonMode', 6, 0)
-	$('#auton-mode').val("Low Bar Shot")
+	NetworkTables.setValue('/SmartDashboard/autonNumber', 6)
+	var V = NetworkTables.getValue('/SmartDashboard/autonNumber', 0)
+	$('#auton-mode').val((V != 0) ? "Low Bar Shot" : "Error!")
     });
 
 $('#auton-7').click(function () {
-	NetworkTables.setValue('/SmartDashboard/autonMode', 7, 0)
-	$('#auton-mode').val("Do Nothing")
+	NetworkTables.setValue('/SmartDashboard/autonNumber', 7)
+	var V = NetworkTables.getValue('/SmartDashboard/autonNumber', 0)
+	$('#auton-mode').val((V != 0) ? "Do Nothing" : "Error!")
     });
 
 $('#auton-8').click(function () {
-	NetworkTables.setValue('/SmartDashboard/autonMode', 8, 0)
-	$('#auton-mode').val("Reach")
+	NetworkTables.setValue('/SmartDashboard/autonNumber', 8)
+	var V = NetworkTables.getValue('/SmartDashboard/autonNumber', 0)
+	$('#auton-mode').val((V != 0) ? "Reach" : "Error!")
     });
 /* End of auton. I definitely need to glorify the code a bit more */
 function getAngle()

@@ -112,10 +112,12 @@ void autonCommand::auton2(){
 		Robot::catA->chivelDeFrise();
 		Robot::catA->moveArm();
 	}
-	else if(Timer::GetFPGATimestamp()<startTime+10){
+	else if(Timer::GetFPGATimestamp()<startTime+5){
 		Robot::drivetrain->driveToAngle(-.85,0);
 		Robot::catA->moveArm();
 	}
+	else
+		Robot::drivetrain->driveToAngle(0,0);
 }
 void autonCommand::auton3(){
 	//rough terrain.  Tested and works on home field.

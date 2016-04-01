@@ -112,9 +112,8 @@ void Robot::AutonomousInit() {
 	Robot::drivetrain->EnableSRX();
 //	Robot::shooter->initShooter();
 //	Robot::intake->init();
-//	Robot::drivetrain->autoShift();
-//	std::thread autoShiftthread(autoShift);
 	Robot::toggleIntakeOff();
+	Robot::drivetrain->gearShift(1);
 	RobotMap::intakeEncoder->Reset();
 	SmartDashboard::PutNumber("thing happened! ",0);
 	Robot::ahrs->ZeroYaw();
@@ -138,10 +137,9 @@ void Robot::TeleopInit() {
 	if (autonomousCommand.get() != nullptr)
 		autonomousCommand->Cancel();
 	Robot::drivetrain->EnableSRX();
+	Robot::drivetrain->gearShift(1);
 	Robot::shooter->initShooter();
 	Robot::intake->init();
-//	Robot::drivetrain->autoShift();
-//	std::thread autoShiftthread(autoShift);
 	prevRBumperState = false;
 	prevLBumperState = false;
 	Robot::toggleIntakeOff();
@@ -160,7 +158,7 @@ void Robot::LogNavXValues(){
 }
 
 void Robot::LogHTMLDashboardValues() {
-	SmartDashboard::PutBoolean("highGear", drivetrain->isInHighGear);
+	SmartDashboard::PutNumber("CurrentGear - 1 = high", drivetrain->currentGear);
 	SmartDashboard::PutNumber("encoder1",RobotMap::intakeEncoder->GetDistance());
 	SmartDashboard::PutNumber("encoder2",Robot::catA->catA2->GetEncPosition());
 }
@@ -179,12 +177,13 @@ void Robot::TeleopPeriodic() {
 	//drive code
 		Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetY(),-1*Robot::oi->getdriveStick()->GetRawAxis(4),true);
 	//gearshifting
-	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::ABUTTON)){
+	Robot::drivetrain->autoShift();
+	/*if(Robot::oi->getdriveStick()->GetRawButton(XBOX::ABUTTON)){
 		Robot::drivetrain->gearShift(1);
 	}
 	else {
 		Robot::drivetrain->gearShift(0);
-	}
+	}*/
 
 	/*	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER)){
 			Robot::catA->catA1->Set(-.5);

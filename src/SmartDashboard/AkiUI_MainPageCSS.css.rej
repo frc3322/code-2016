@@ -1,0 +1,9 @@
+diff a/src/SmartDashboard/AkiUI_MainPageCSS.css b/src/SmartDashboard/AkiUI_MainPageCSS.css	(rejected hunks)
+@@ -11,6 +11,7 @@
+     color:black;
+ }
+ 
++#webcam,
+ #webcam-a {
+  transform: rotate(180deg);
+ }

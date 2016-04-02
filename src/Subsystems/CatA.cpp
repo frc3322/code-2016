@@ -64,21 +64,21 @@ int CatA::armPos(int pos) {
 }
 
 void CatA::moveArm() {
-	catA2->Set(computePID(setpoint, armPos(static_cast<int>(RobotMap::pot->Get())), .05, 0, 0, 0)); //test PID values
+	catA2->Set(computePID(setpoint, armPos(static_cast<int>(RobotMap::pot->Get())), .025, 0, 0, 0)); //test PID values
 	SmartDashboard::PutNumber("Setpoint", setpoint);
 }
 
 void CatA::chivelDeFrise(){
 	//catA2->Set(CatA::calculatePID(0,catA2->GetEncPosition(),.02,0,.08));   //1350, 480
-	setpoint = 592; //change as needed, approximated to be right above the chivel de frise
+	setpoint = 152; //change as needed, approximated to be right above the chivel de frise
 }
 
 void CatA::portcollisInit(){
-	setpoint = 580; //change as needed, approximated to be right above the carpet
+	setpoint = 120; //change as needed, approximated to be right above the carpet
 }
 
 void CatA::portcollisLift(){
-	setpoint = 580; //change as needed, approximated to be raised as high as possible w/out hitting robot
+	setpoint = 303; //change as needed, approximated to be raised as high as possible w/out hitting robot
 }
 
 void CatA::lower() {

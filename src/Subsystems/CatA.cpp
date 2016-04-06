@@ -64,21 +64,21 @@ int CatA::armPos(int pos) {
 }
 
 void CatA::moveArm() {
-	catA2->Set(computePID(setpoint, armPos(static_cast<int>(RobotMap::pot->Get())), .025, 0, 0, 0)); //test PID values
+	catA2->Set(computePID(setpoint, RobotMap::pot->Get(), 0.6*.025, 0, 0, 0)); //test PID values
 	SmartDashboard::PutNumber("Setpoint", setpoint);
 }
 
 void CatA::chivelDeFrise(){
 	//catA2->Set(CatA::calculatePID(0,catA2->GetEncPosition(),.02,0,.08));   //1350, 480
-	setpoint = 152; //change as needed, approximated to be right above the chivel de frise
+	setpoint = 288; //change as needed, approximated to be right above the chivel de frise
 }
 
 void CatA::portcollisInit(){
-	setpoint = 120; //change as needed, approximated to be right above the carpet
+	setpoint = 304; //change as needed, approximated to be right above the carpet
 }
 
 void CatA::portcollisLift(){
-	setpoint = 303; //change as needed, approximated to be raised as high as possible w/out hitting robot
+	setpoint = 168; //change as needed, approximated to be raised as high as possible w/out hitting robot
 }
 
 void CatA::lower() {
@@ -96,13 +96,14 @@ void CatA::initPID() {
 	lastError = setpoint - catA2->GetEncPosition();
 }
 double CatA::computePID(double target, double potPos, double kP, double kI, double kD, double decay) {
-		double error = target - potPos; //assuming 200 is where robot starts
+		double error = target - potPos;
         double pTerm = error * kP;
         iTerm = iTerm * decay + error * kI;
         double dTerm = (lastError - error) * kD;
         lastError = error;
         double power = pTerm + iTerm + dTerm;
-        return power;
+        SmartDashboard::PutNumber("PID val",power);
+        return -power;
 }
 
 void CatA::InitDefaultCommand() {

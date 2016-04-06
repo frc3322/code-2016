@@ -35,9 +35,9 @@ Intake::Intake() : Subsystem("Intake") {
 //    intakeRotateTalon2->Set(6);
     spinTalonRunning = false;
 
-    intakeRotateTalon2->SetControlMode(CANTalon::ControlMode::kFollower);
-    intakeRotateTalon2->Set(3);
-    intakeRotateTalon2->SetInverted(true);
+//    intakeRotateTalon2->SetControlMode(CANTalon::ControlMode::kFollower);
+//    intakeRotateTalon2->Set(3);
+//    intakeRotateTalon2->SetInverted(true);
 }
 
 void Intake::InitDefaultCommand() {
@@ -90,11 +90,12 @@ void Intake::init(){
 	intakeSpinTalon2->Enable();
 	intakeRotateTalon1->Enable();
 	intakeRotateTalon2->Enable();
-
+//	intakeRotateTalon2->SetControlMode(CANTalon::kFollower);
+//	intakeRotateTalon2->Set(3); //slaved to rotatetalon1
 	intakeSpinTalon1->Set(0);
 	intakeSpinTalon2->Set(0);
 	intakeRotateTalon1->Set(0);
-//	intakeRotateTalon2->Set(0);
+	intakeRotateTalon2->Set(0);
 
 }
 void Intake::setPosition(int setpoint,float p,float i,float d,float f){
@@ -105,18 +106,20 @@ void Intake::setPosition(int setpoint,float p,float i,float d,float f){
 	RobotMap::intakePID->SetSetpoint(setpoint);
 }
 void Intake::grabBall(){
-	intakeSpinTalon1->Set(.2);
-	intakeSpinTalon2->Set(-.7);
-	intakeRotateTalon1->Set(Intake::calculatePID(-270,RobotMap::intakeEncoder->GetDistance(),.015,0,.08));
+	intakeSpinTalon1->Set(.35);
+	intakeSpinTalon2->Set(.7);
+	intakeRotateTalon1->Set(Intake::calculatePID(920,RobotMap::intakePot->Get(),.33*.015,0,.33*.08));
+	intakeRotateTalon2->Set(Intake::calculatePID(920,RobotMap::intakePot->Get(),.33*.015,0,.33*.08));
 }
 void Intake::holdBall(){
 	intakeSpinTalon1->Set(0);
-	intakeRotateTalon1->Set(Intake::calculatePID(-300,RobotMap::intakeEncoder->GetDistance(),.015,0,.08));
+	intakeRotateTalon1->Set(Intake::calculatePID(720,RobotMap::intakePot->Get(),.33*.015,0,.33*.08));
+	intakeRotateTalon2->Set(Intake::calculatePID(720,RobotMap::intakePot->Get(),.33*.015,0,.33*.08));
 }
 double Intake::calculatePID(double setpoint, double current, double Kp, double Ki, double Kd){
-	double encoderAngle = (-285.5-current)*(3.1415/2)/(-182.75);
+	double encoderAngle = (current-855)*(3.1415/2)/(72);
 //	printf("encoder angle %f",encoderAngle);
-	f = .4*cos(encoderAngle);
+	f =.15*sin(encoderAngle);
 
 	double dVal = 0;
 	Ki = 0.0000;
@@ -130,32 +133,26 @@ double Intake::calculatePID(double setpoint, double current, double Kp, double K
 	previous = current;
 //	return f;
 
-	return (Kp*(setpoint-current) + f)+(iVal*Ki)+-dVal; //there used to be an f term here. maybe that's why its jittery?
+	return (Kp*(setpoint-current) + f)+(iVal*Ki)+-dVal;
 
 }
 void Intake::loadingBall(double cycleStartTime){
-	intakeDone = false;
-	Robot::shooter->testPID(11.80);
-	printf("cycle start time %f ",cycleStartTime);
-	printf("if statement value %f",(Timer::GetFPGATimestamp()-.5));
-	if((Timer::GetFPGATimestamp())>(cycleStartTime)){
-		intakeSpinTalon1->Set(1);
-		intakeSpinTalon2->Set(-1);
+	loadingball = true;
+	Robot::shooter->testPID(11.75);
+	if((Timer::GetFPGATimestamp()-6.50)<(double)cycleStartTime){
+		intakeRotateTalon1->Set(0);
+		intakeRotateTalon2->Set(0);
+		intakeRotateTalon2->Set(-1);
 	}
-	if((Timer::GetFPGATimestamp()-1.55)>(double)cycleStartTime){
-//		intakeRotateTalon1->Set(Intake::calculatePID(0,RobotMap::intakeEncoder->Get(),.02,0,.08));
-		intakeDone = true;
-		readyToShoot = false;
-	}
-	if((Timer::GetFPGATimestamp()-2.5)>(double)cycleStartTime){
+	else if((Timer::GetFPGATimestamp()-7.7)<(double)cycleStartTime){
+		readyToShoot=true;
+		loadingball = false;
 		intakeSpinTalon1->Set(0);
 		intakeSpinTalon2->Set(0);
-		Robot::shooter->testPID(0);
-//		RobotMap::intakeEncoder->Reset();
-
+		intakeRotateTalon2->Set(0);
+		Robot::shooter->stopShooter();
 		SmartDashboard::PutNumber("thing happened! ",cycleStartTime);
 	}
-
 }
 void Intake::stopIntakeSpinners(){
 	intakeSpinTalon1->Set(0);

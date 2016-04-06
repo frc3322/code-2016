@@ -40,6 +40,7 @@ std::shared_ptr<Encoder> RobotMap::intakeEncoder;
 std::shared_ptr<PIDController> RobotMap::catAPID;
 std::shared_ptr<Encoder> RobotMap::catAEncoder;
 std::shared_ptr<Potentiometer> RobotMap::pot;
+std::shared_ptr<Potentiometer> RobotMap::intakePot;
 
 
 void RobotMap::init() {
@@ -76,23 +77,24 @@ void RobotMap::init() {
     drivetraingearshiftLeft.reset(new DoubleSolenoid(0, 2, 3));
     lw->AddActuator("Drivetrain", "gearshiftLeft", drivetraingearshiftLeft);
 
-    shootershooterTalon1.reset(new CANTalon(11));
+    shootershooterTalon1.reset(new CANTalon(10));
     lw->AddActuator("Shooter", "shooterTalon1", shootershooterTalon1);
 
-    shootershooterTalon2.reset(new CANTalon(10));
+    shootershooterTalon2.reset(new CANTalon(11));
     lw->AddActuator("Shooter", "shooterTalon2", shootershooterTalon2);
 
     intakeintakeSpinTalon1.reset(new CANTalon(2));
     lw->AddActuator("Intake", "intakeSpinTalon1", intakeintakeSpinTalon1);
 
-    intakeintakeSpinTalon2.reset(new CANTalon(6));
+    intakeintakeSpinTalon2.reset(new CANTalon(7));
     lw->AddActuator("Intake", "intakeSpinTalon2", intakeintakeSpinTalon2);
 
     intakeintakeRotateTalon1.reset(new CANTalon(3));
     lw->AddActuator("Intake", "intakeRotateTalon1", intakeintakeRotateTalon1);
 
-    intakeintakeRotateTalon2.reset(new CANTalon(7));
+    intakeintakeRotateTalon2.reset(new CANTalon(6));
     lw->AddActuator("Intake", "intakeRotateTalon2", intakeintakeRotateTalon2);
+    intakeintakeRotateTalon2->SetInverted(true);
 
     catACatA1.reset(new CANTalon(5));
     lw->AddActuator("Cat A", "CatA1", catACatA1);
@@ -111,6 +113,8 @@ void RobotMap::init() {
     catAPID->SetContinuous(false);
     catAPID->SetOutputRange(-1.0,1.0);
     pot.reset(new AnalogPotentiometer(0,1000,0));
+    intakePot.reset(new AnalogPotentiometer(1,1000,0));
+
 //    drivetraindriveSRX1->SetInverted(true);
 //    drivetraindriveSRX2->SetInverted(true);
 }

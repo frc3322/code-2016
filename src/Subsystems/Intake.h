@@ -65,7 +65,8 @@ public:
 	void spinBack();
 
 	bool intakeDone = false;
-	bool readyToShoot;
+	bool readyToShoot = true;
+	bool loadingball = false;
 };
 
 #endif

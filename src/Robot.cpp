@@ -106,6 +106,7 @@ void Robot::DisabledPeriodic() {
 	Robot::LogNavXValues();
 	SmartDashboard::PutNumber("ticks ",Robot::shooter->shooterFrontTalon->GetEncPosition());
 	SmartDashboard::PutNumber("Category A ticks",Robot::catA->catA2->GetEncPosition());
+	SmartDashboard::PutNumber("intake pot",RobotMap::intakePot->Get());
 }
 
 void Robot::AutonomousInit() {
@@ -143,7 +144,7 @@ void Robot::TeleopInit() {
 	prevRBumperState = false;
 	prevLBumperState = false;
 	Robot::toggleIntakeOff();
-	RobotMap::intakeEncoder->Reset();
+	//RobotMap::intakeEncoder->Reset();
 	SmartDashboard::PutNumber("thing happened! ",0);
 	Robot::ahrs->ZeroYaw();
 	Robot::catA->portcollisLift();
@@ -166,9 +167,15 @@ void Robot::LogHTMLDashboardValues() {
 void Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 	cycleStartTime = Timer::GetFPGATimestamp();
+	isFirstGather = Robot::intake->readyToShoot;
+	loadingBall = Robot::intake->loadingball;
+//	Robot::intake->intakeRotateTalon2->
 	//slaving the second rotate talon
-	Robot::intake->intakeRotateTalon2->Set(3);
+	//Robot::intake->intakeRotateTalon2->Set(3);
 	//SmartDashboard
+	SmartDashboard::PutNumber("pot",RobotMap::pot->Get());
+	SmartDashboard::PutNumber("intake pot",RobotMap::intakePot->Get());
+
 	SmartDashboard::PutNumber("encoder dist",RobotMap::intakeEncoder->GetDistance());
 	SmartDashboard::PutNumber("vel",Robot::shooter->returnVel());
 
@@ -207,38 +214,35 @@ void Robot::TeleopPeriodic() {
 		loadingBall = false;
 		grabbingBall = false;
 
-		if(RobotMap::intakeEncoder->Get()<50){
-			Robot::intake->stopIntakeSpinners();
-		}
-
 		if(Robot::oi->gettechStick()->GetRawButton(XBOX::LSTICKP)){
-			Robot::intake->intakeRotateTalon1->Set(-1);
+			Robot::intake->intakeRotateTalon1->Set(.25);
+			Robot::intake->intakeRotateTalon2->Set(.25);
 		}
 		else if(Robot::oi->gettechStick()->GetRawButton(XBOX::RSTICKP)){
-			Robot::intake->intakeRotateTalon1->Set(1);
-
+			Robot::intake->intakeRotateTalon1->Set(-.65);
+			Robot::intake->intakeRotateTalon2->Set(-.65);
+			Robot::intake->intakeSpinTalon1->Set(.65);
+			Robot::intake->intakeSpinTalon2->Set(.65);
 		}
 		else{
 			Robot::intake->intakeRotateTalon1->Set(0);
+			Robot::intake->intakeRotateTalon2->Set(0);
+			Robot::intake->intakeSpinTalon1->Set(0);
+			Robot::intake->intakeSpinTalon2->Set(0);
 		}
 
-	}
-	if(Robot::oi->gettechStick()->GetRawButton(XBOX::ABUTTON)){
-		Robot::shooter->testPID(11.23);
 	}
 	if (Robot::oi->gettechStick()->GetRawButton(XBOX::BBUTTON) || holdingBall){
 		toggleIntakeOff();
 		holdingBall = true;
 		Robot::intake->holdBall();
 	}
-	if(Robot::oi->gettechStick()->GetRawButton(XBOX::XBUTTON) && isFirstGather){
-		isFirstGather = false;
+	if(Robot::oi->gettechStick()->GetRawButton(XBOX::XBUTTON)){
 		toggleIntakeOff();
 		loadingBall = true;
 		Robot::intake->loadingBall(cycleStartTime);
 		loadStartTime = cycleStartTime;
 	}
-
 	if(Robot::intake->intakeDone){
 		resetIntake();
 	}
@@ -247,17 +251,12 @@ void Robot::TeleopPeriodic() {
 		grabbingBall = true;
 		Robot::intake->grabBall();
 	}
-	if(!isFirstGather && loadingBall){
+	if(loadingBall){
 		Robot::intake->loadingBall(loadStartTime);
 	}
 	if(Robot::oi->gettechStick()->GetRawButton(XBOX::ABUTTON)){
 		Robot::intake->readyToShoot = true;
 	}
-
-	if(Robot::intake->readyToShoot){
-		Robot::shooter->testPID(11.23);
-	}
-
 	if(Robot::oi->gettechStick()->GetRawButton(XBOX::START)){
 		isFirstGather = true;
 		RobotMap::intakeEncoder->Reset();
@@ -269,9 +268,6 @@ void Robot::TeleopPeriodic() {
 	} else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BBUTTON)) {
 		Robot::catA->portcollisLift();
 	}
-	SmartDashboard::PutNumber("XBUTTON", Robot::oi->getdriveStick()->GetRawButton(XBOX::XBUTTON));
-	SmartDashboard::PutNumber("YBUTTON", Robot::oi->getdriveStick()->GetRawButton(XBOX::YBUTTON));
-	SmartDashboard::PutNumber("BBUTTON", Robot::oi->getdriveStick()->GetRawButton(XBOX::BBUTTON));
 	SmartDashboard::PutNumber("CATAPOSITION", Robot::catA->armPos(static_cast<int>(RobotMap::pot->Get())));
 	//cat. A PID
 	Robot::catA->moveArm();

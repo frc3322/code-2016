@@ -46,16 +46,19 @@ void Shooter::testPID(float setpointFront){
 //	shooterFrontTalon->SetP(pF);
 //	shooterFrontTalon->SetP(iF);
 //	shooterFrontTalon->SetP(dF);
-	shooterBackTalon->SetControlMode(CANTalon::ControlMode::kFollower);
-	shooterBackTalon->Set(10);
-	shooterFrontTalon->SelectProfileSlot(0);
+	shooterFrontTalon->SetControlMode(CANTalon::ControlMode::kFollower);
+	shooterFrontTalon->Set(10);
+	shooterBackTalon->SelectProfileSlot(0);
 	shooterFrontTalon->SetSensorDirection(false);
-	shooterFrontTalon->SetControlMode(CANTalon::ControlMode::kSpeed);
-	shooterFrontTalon->Set(-4096*setpointFront);
+	shooterBackTalon->SetControlMode(CANTalon::ControlMode::kSpeed);
+	shooterBackTalon->Set(-4096*setpointFront);//
+//	shooterFrontTalon->Set(-4096*setpointFront);
+//	shooterFrontTalon->Set(10);
+
 }
 void Shooter::stopShooter(){
-	shooterFrontTalon->SelectProfileSlot(1);
-//	shooterFrontTalon->Set(0);
+	shooterBackTalon->SelectProfileSlot(1);
+	shooterBackTalon->Set(0);
 }
 void Shooter::initShooter(){
 	shooterBackTalon->Enable();

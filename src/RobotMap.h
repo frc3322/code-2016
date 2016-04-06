@@ -53,6 +53,7 @@ public:
 	static std::shared_ptr<PIDController> catAPID;
 	static std::shared_ptr<Encoder> catAEncoder;
 	static std::shared_ptr<Potentiometer> pot;
+	static std::shared_ptr<Potentiometer> intakePot;
 
 
 	static void init();

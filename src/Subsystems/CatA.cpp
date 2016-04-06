@@ -34,17 +34,6 @@ void CatA::init(){
 	catA2->SetEncPosition(0);
 }
 
-/*void CatA::setPosition(int setpoint,float p,float i,float d,float f){
-
-//	RobotMap::intakeEncoder->Reset();
-	catA1->SetPID(p,i,d,f);
-	catA2->SetPID(p,i,d,f);
-	catA1->Enable();
-	catA2->Enable();
-	catA1->SetSetpoint(setpoint);
-	catA2->SetSetpoint(setpoint);
-}*/
-
 void CatA::armPosinit() {
 	int posArr[5];
 	int replaceArr = 0;
@@ -69,7 +58,6 @@ void CatA::moveArm() {
 }
 
 void CatA::chivelDeFrise(){
-	//catA2->Set(CatA::calculatePID(0,catA2->GetEncPosition(),.02,0,.08));   //1350, 480
 	setpoint = 288; //change as needed, approximated to be right above the chivel de frise
 }
 

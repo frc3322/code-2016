@@ -184,42 +184,29 @@ void Robot::TeleopPeriodic() {
 
 
 	//driver controls
+	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::YBUTTON)){
+			Robot::catA->chivelDeFrise();
+		} else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::XBUTTON)) {
+			Robot::catA->portcollisInit();
+		} else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BBUTTON)) {
+			Robot::catA->portcollisLift();
+		}
 	//drive code
 		Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetY(),-1*Robot::oi->getdriveStick()->GetRawAxis(4),true);
-	//gearshifting
-	Robot::drivetrain->autoShift();
-	/*if(Robot::oi->getdriveStick()->GetRawButton(XBOX::ABUTTON)){
-		Robot::drivetrain->gearShift(1);
-	}
-	else {
-		Robot::drivetrain->gearShift(0);
-	}*/
-
-	/*	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER)){
-			Robot::catA->catA1->Set(-.5);
-			Robot::catA->catA2->Set(.5);
-		}
-		else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER)){
-			Robot::catA->catA1->Set(.5);
-			Robot::catA->catA2->Set(-.5);
-		}
-		else{
-			Robot::catA->catA1->Set(0);
-			Robot::catA->catA2->Set(0);
-	}*/
 
 	//tech controls
-	if(Robot::oi->gettechStick()->GetRawButton(XBOX::LBUMPER)){
-		Robot::intake->takeBallIn();
-	}
+
+	//manual intake control
 	if(Robot::oi->gettechStick()->GetRawButton(XBOX::RBUMPER)){
 		holdingBall = false;
 		loadingBall = false;
 		grabbingBall = false;
 
 		if(Robot::oi->gettechStick()->GetRawButton(XBOX::LSTICKP)){
-			Robot::intake->intakeRotateTalon1->Set(.25);
-			Robot::intake->intakeRotateTalon2->Set(.25);
+			Robot::intake->intakeRotateTalon1->Set(.45);
+			Robot::intake->intakeRotateTalon2->Set(.45);
+			Robot::intake->intakeSpinTalon1->Set(.65);
+			Robot::intake->intakeSpinTalon2->Set(.65);
 		}
 		else if(Robot::oi->gettechStick()->GetRawButton(XBOX::RSTICKP)){
 			Robot::intake->intakeRotateTalon1->Set(-.65);
@@ -235,17 +222,20 @@ void Robot::TeleopPeriodic() {
 		}
 
 	}
+
 	if (Robot::oi->gettechStick()->GetRawButton(XBOX::BBUTTON) || holdingBall){
 		toggleIntakeOff();
 		holdingBall = true;
 		Robot::intake->holdBall();
 	}
+
 	if(Robot::oi->gettechStick()->GetRawButton(XBOX::XBUTTON)){
 		toggleIntakeOff();
 		loadingBall = true;
 		Robot::intake->loadingBall(cycleStartTime);
 		loadStartTime = cycleStartTime;
 	}
+
 	if(Robot::intake->intakeDone){
 		resetIntake();
 	}
@@ -254,41 +244,19 @@ void Robot::TeleopPeriodic() {
 		grabbingBall = true;
 		Robot::intake->grabBall();
 	}
-	if(loadingBall){
-		Robot::intake->loadingBall(loadStartTime);
-	}
 	if(Robot::oi->gettechStick()->GetRawButton(XBOX::ABUTTON)){
 		Robot::intake->readyToShoot = true;
 	}
-	if(Robot::oi->gettechStick()->GetRawButton(XBOX::START)){
-		isFirstGather = true;
-		RobotMap::intakeEncoder->Reset();
+
+	if(loadingBall){
+		Robot::intake->loadingBall(loadStartTime);
 	}
-	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::YBUTTON)){
-		Robot::catA->chivelDeFrise();
-	} else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::XBUTTON)) {
-		Robot::catA->portcollisInit();
-	} else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BBUTTON)) {
-		Robot::catA->portcollisLift();
-	}
-	SmartDashboard::PutNumber("CATAPOSITION", Robot::catA->armPos(static_cast<int>(RobotMap::pot->Get())));
+
 	//cat. A PID
 	Robot::catA->moveArm();
 
-//	prevRBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::RBUMPER);
-//	prevLBumperState = Robot::oi->getdriveStick()->GetRawButton(XBOX::LBUMPER);
-//	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BACK)){
-//		Robot::shooter->testPID(256*1200);
-//	}
-//	else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::START)){
-//		Robot::shooter->stopShooter();
-//	}
-
-//	if(Robot::oi->gettechStick()->GetRawButton(XBOX::BACK) || secondaryHold){
-//		Robot::resetIntake();
-//		Robot::intake->intakeRotateTalon1->Set(Robot::intake->calculatePID(122,RobotMap::intakeEncoder->Get(),.02,0,.08));
-//		Robot::secondaryHold = true;
-//	}
+	//gearshifting
+	Robot::drivetrain->autoShift();
 }
 
 

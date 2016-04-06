@@ -162,6 +162,9 @@ void Robot::LogHTMLDashboardValues() {
 	SmartDashboard::PutNumber("CurrentGear - 1 = high", drivetrain->currentGear);
 	SmartDashboard::PutNumber("encoder1",RobotMap::intakeEncoder->GetDistance());
 	SmartDashboard::PutNumber("encoder2",Robot::catA->catA2->GetEncPosition());
+	SmartDashboard::PutNumber("armangle",Robot::ahrs->GetYaw());
+	SmartDashboard::PutNumber("shootSpeed",Robot::shooter->shooterBackTalon->GetEncVel());
+
 }
 
 void Robot::TeleopPeriodic() {

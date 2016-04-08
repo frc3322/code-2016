@@ -78,6 +78,7 @@ public:
 	bool secondaryHold;
 
 	double loadStartTime;
+	float target = 168;
 
 };
 #endif

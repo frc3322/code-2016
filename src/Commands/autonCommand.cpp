@@ -88,21 +88,22 @@ void autonCommand::Interrupted() {
 }
 void autonCommand::auton1(){
 	//portcullis.  Tested and works on home field.
+//	Robot::catA->portcollisInit();
+
 	if(Timer::GetFPGATimestamp()<startTime+3){
-//		Robot::drivetrain->getDrive()->ArcadeDrive(-.5,-.03*RobotMap::ahrs->GetYaw());
+		Robot::catA->portcollisInit();
+		Robot::catA->moveArm();
 		Robot::drivetrain->driveToAngle(-.65,0);
-		Robot::catA->lower();
 	}
 	else if(Timer::GetFPGATimestamp()<startTime+5){
-		Robot::catA->lower(); //make sure it stays low enough
+		Robot::catA->portcollisInit();
+		Robot::catA->moveArm();
 		Robot::drivetrain->driveToAngle(-.8,0);
-//		Robot::drivetrain->getDrive()->ArcadeDrive(-.8,-.03*RobotMap::ahrs->GetYaw());
 	}
 
 	else {
 		Robot::drivetrain->driveToAngle(-.8,0);
 		Robot::catA->stop(); //reduce motor strain
-//		Robot::drivetrain->getDrive()->ArcadeDrive(-.5,-.03*RobotMap::ahrs->GetYaw());
 	}
 }
 void autonCommand::auton2(){

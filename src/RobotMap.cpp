@@ -83,16 +83,16 @@ void RobotMap::init() {
     shootershooterTalon2.reset(new CANTalon(11));
     lw->AddActuator("Shooter", "shooterTalon2", shootershooterTalon2);
 
-    intakeintakeSpinTalon1.reset(new CANTalon(2));
+    intakeintakeSpinTalon1.reset(new CANTalon(3));
     lw->AddActuator("Intake", "intakeSpinTalon1", intakeintakeSpinTalon1);
 
-    intakeintakeSpinTalon2.reset(new CANTalon(7));
+    intakeintakeSpinTalon2.reset(new CANTalon(6));
     lw->AddActuator("Intake", "intakeSpinTalon2", intakeintakeSpinTalon2);
 
-    intakeintakeRotateTalon1.reset(new CANTalon(3));
+    intakeintakeRotateTalon1.reset(new CANTalon(2));
     lw->AddActuator("Intake", "intakeRotateTalon1", intakeintakeRotateTalon1);
 
-    intakeintakeRotateTalon2.reset(new CANTalon(6));
+    intakeintakeRotateTalon2.reset(new CANTalon(7));
     lw->AddActuator("Intake", "intakeRotateTalon2", intakeintakeRotateTalon2);
     intakeintakeRotateTalon2->SetInverted(true);
 

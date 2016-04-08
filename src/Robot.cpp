@@ -115,7 +115,6 @@ void Robot::AutonomousInit() {
 //	Robot::intake->init();
 	Robot::toggleIntakeOff();
 	Robot::drivetrain->gearShift(1);
-	RobotMap::intakeEncoder->Reset();
 	SmartDashboard::PutNumber("thing happened! ",0);
 	Robot::ahrs->ZeroYaw();
 	if (autonomousCommand.get() != nullptr)
@@ -125,6 +124,41 @@ void Robot::AutonomousInit() {
 
 void Robot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
+	int autonNumber = SmartDashboard::GetNumber("Auton Number: ",1);
+	switch(autonNumber){
+	case 1:
+		//portcullis
+		Robot::catA->portcollisInit();
+		break;
+	case 2:
+		//chivel de frise
+		Robot::catA->chivelDeFrise();
+		break;
+	case 3:
+		//rough terrain
+		break;
+	case 4:
+		//moat
+		break;
+	case 5:
+		//low bar simple
+		Robot::catA->portcollisInit();
+		break;
+	case 6:
+		//low bar with shot
+		break;
+	case 7:
+		//do nothing
+		break;
+	case 8:
+		//reach
+		break;
+	default:
+		//portcullis
+		Robot::catA->portcollisInit();
+		break;
+	}
+	Robot::catA->moveArm();
 	Robot::LogNavXValues();
 
 
@@ -171,7 +205,7 @@ void Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 	cycleStartTime = Timer::GetFPGATimestamp();
 	isFirstGather = Robot::intake->readyToShoot;
-	loadingBall = Robot::intake->loadingball;
+//	loadingBall = Robot::intake->loadingball;
 //	Robot::intake->intakeRotateTalon2->
 	//slaving the second rotate talon
 	//Robot::intake->intakeRotateTalon2->Set(3);
@@ -184,7 +218,7 @@ void Robot::TeleopPeriodic() {
 
 
 	//driver controls
-	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::YBUTTON)){
+	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::YBUTTON)){//
 			Robot::catA->chivelDeFrise();
 		} else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::XBUTTON)) {
 			Robot::catA->portcollisInit();
@@ -203,16 +237,16 @@ void Robot::TeleopPeriodic() {
 		grabbingBall = false;
 
 		if(Robot::oi->gettechStick()->GetRawButton(XBOX::LSTICKP)){
-			Robot::intake->intakeRotateTalon1->Set(.45);
-			Robot::intake->intakeRotateTalon2->Set(.45);
+			Robot::intake->intakeRotateTalon1->Set(-.45);
+			Robot::intake->intakeRotateTalon2->Set(-.45);
 			Robot::intake->intakeSpinTalon1->Set(.65);
 			Robot::intake->intakeSpinTalon2->Set(.65);
 		}
 		else if(Robot::oi->gettechStick()->GetRawButton(XBOX::RSTICKP)){
-			Robot::intake->intakeRotateTalon1->Set(-.65);
-			Robot::intake->intakeRotateTalon2->Set(-.65);
-			Robot::intake->intakeSpinTalon1->Set(.65);
-			Robot::intake->intakeSpinTalon2->Set(.65);
+			Robot::intake->intakeRotateTalon1->Set(.65);
+			Robot::intake->intakeRotateTalon2->Set(.65);
+			Robot::intake->intakeSpinTalon1->Set(-.65);
+			Robot::intake->intakeSpinTalon2->Set(-.65);
 		}
 		else{
 			Robot::intake->intakeRotateTalon1->Set(0);
@@ -245,7 +279,11 @@ void Robot::TeleopPeriodic() {
 		Robot::intake->grabBall();
 	}
 	if(Robot::oi->gettechStick()->GetRawButton(XBOX::ABUTTON)){
-		Robot::intake->readyToShoot = true;
+		loadingBall=false;
+		Robot::shooter->testPID(0);
+		Robot::shooter->shooterBackTalon->SetControlMode(CANTalon::ControlMode::kVoltage);
+		Robot::shooter->shooterBackTalon->Set(0);
+		Robot::intake->intakeRotateTalon2->Set(0);
 	}
 
 	if(loadingBall){

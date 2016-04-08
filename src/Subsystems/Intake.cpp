@@ -138,15 +138,14 @@ double Intake::calculatePID(double setpoint, double current, double Kp, double K
 }
 void Intake::loadingBall(double cycleStartTime){
 	loadingball = true;
-	Robot::shooter->testPID(11.5);
-	if((Timer::GetFPGATimestamp()-8)<(double)cycleStartTime || 	Robot::shooter->shooterFrontTalon->GetEncVel()<-4096*11)
+	Robot::shooter->testPID(19);
+	if((Timer::GetFPGATimestamp()-4)>(double)cycleStartTime || 	Robot::shooter->shooterFrontTalon->GetEncVel()<-4096*19.5)
 		//shooter speed needs to be checked
 	{
-		intakeRotateTalon1->Set(0);
-		intakeRotateTalon2->Set(0);
-		intakeRotateTalon2->Set(-1);
+		intakeSpinTalon1->Set(1);
+		intakeSpinTalon2->Set(1);
 	}
-	else if((Timer::GetFPGATimestamp()-9.5)<(double)cycleStartTime){
+	else if((Timer::GetFPGATimestamp()-8.5)>(double)cycleStartTime){
 		readyToShoot=true;
 		loadingball = false;
 		intakeSpinTalon1->Set(0);

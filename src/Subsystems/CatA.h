@@ -52,13 +52,14 @@ public:
 //	void setPosition(int setpoint, float p, float i, float d, float f);
 	void lower();
 	void stop();
-	/*double f;
+	double f;
 	double iVal = 0;
 	double previousIVal = 0;
 	double pi = 3.1415;
 	double previous = 0;
 	double maxEncoder = 0;
-	double previousError = 0; */
+	double previousError = 0;
+
 };
 
 #endif

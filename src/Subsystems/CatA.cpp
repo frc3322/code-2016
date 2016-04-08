@@ -53,12 +53,12 @@ int CatA::armPos(int pos) {
 }
 
 void CatA::moveArm() {
-	catA2->Set(computePID(setpoint, RobotMap::pot->Get(), 0.6*.025, 0, 0, 0)); //test PID values
+	catA2->Set(computePID(setpoint, RobotMap::pot->Get(), 0.025, 0, 0, 0)); //test PID values
 	SmartDashboard::PutNumber("Setpoint", setpoint);
 }
 
 void CatA::chivelDeFrise(){
-	setpoint = 288; //change as needed, approximated to be right above the chivel de frise
+	setpoint = 278; //change as needed, approximated to be right above the chivel de frise
 }
 
 void CatA::portcollisInit(){
@@ -84,14 +84,32 @@ void CatA::initPID() {
 	lastError = setpoint - catA2->GetEncPosition();
 }
 double CatA::computePID(double target, double potPos, double kP, double kI, double kD, double decay) {
-		double error = target - potPos;
-        double pTerm = error * kP;
-        iTerm = iTerm * decay + error * kI;
-        double dTerm = (lastError - error) * kD;
-        lastError = error;
-        double power = pTerm + iTerm + dTerm;
-        SmartDashboard::PutNumber("PID val",power);
-        return -power;
+//		double error = target - potPos;
+//        double pTerm = error * kP;
+//        iTerm = iTerm * decay + error * kI;
+//        double dTerm = (lastError - error) * kD;
+//        lastError = error;
+//        double power = pTerm + iTerm + dTerm;
+//        SmartDashboard::PutNumber("PID val",power);
+//        return -power;
+
+	double encoderAngle = (potPos-204)*(3.1415/2)/(70);
+//	printf("encoder angle %f",encoderAngle);
+//	printf("encoder angle %f",encoderAngle);
+	f =.15*sin(encoderAngle);
+
+	double dVal = 0;
+	double iVal = previousIVal + (double)setpoint-(double)potPos;
+//	printf("IVal %f",iVal);
+	if(previous != 0){
+		dVal = ((double)potPos-(double)previous)*kD;
+//		printf("Dval %f",dVal);
+	}
+	previousIVal = iVal;
+	previous = potPos;
+//	return f;
+	SmartDashboard::PutNumber("Setpoint val",setpoint);
+	return -(kP*(setpoint-potPos) + f)+(iVal*kI)+-dVal;
 }
 
 void CatA::InitDefaultCommand() {

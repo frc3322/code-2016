@@ -119,12 +119,12 @@ void Robot::AutonomousInit() {
 	Robot::ahrs->ZeroYaw();
 	if (autonomousCommand.get() != nullptr)
 		autonomousCommand->Start();
-
+	startTime = Timer::GetFPGATimestamp();
 }
 
 void Robot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
-	int autonNumber = SmartDashboard::GetNumber("Auton Number: ",1);
+	int autonNumber = SmartDashboard::GetNumber("autonNumber",1);
 	switch(autonNumber){
 	case 1:
 		//portcullis
@@ -132,8 +132,17 @@ void Robot::AutonomousPeriodic() {
 		break;
 	case 2:
 		//chivel de frise
-//		Robot::catA->chivelDeFrise();
-		break;
+		if(Timer::GetFPGATimestamp()<startTime+4){
+			Robot::catA->portcollisLift();
+			Robot::catA->moveArm();
+		}
+		else if(Timer::GetFPGATimestamp()<startTime+4.1){
+			Robot::catA->portcollisInit();
+			Robot::catA->moveArm();
+		}
+		else if(Timer::GetFPGATimestamp()<startTime+5){
+			Robot::catA->moveArm();
+		}
 	case 3:
 		//rough terrain
 		break;
@@ -232,7 +241,7 @@ void Robot::TeleopPeriodic() {
 		Robot::catA->portcollisLift();
 	}
 	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::ABUTTON)){
-		Robot::drivetrain->driveToAngle(-.8,0);
+		Robot::drivetrain->driveToAngle(-.95,0);
 	}
 	else{
 		Robot::ahrs->ZeroYaw();

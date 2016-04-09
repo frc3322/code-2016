@@ -26,7 +26,7 @@ autonCommand::autonCommand(): Command() {
 // Called just before this Command runs the first time
 void autonCommand::Initialize() {
 	firstTime=true;
-	autonNumber = SmartDashboard::GetNumber("Auton Number: ",1);
+	autonNumber = SmartDashboard::GetNumber("autonNumber",1);
 	startTime = Timer::GetFPGATimestamp();
 
 }
@@ -64,7 +64,7 @@ void autonCommand::Execute() {
 		//reach
 		break;
 	default:
-		auton3();
+		auton1();
 		break;
 	}
 
@@ -87,25 +87,39 @@ void autonCommand::Interrupted() {
 }
 void autonCommand::auton1(){
 	//portcullis.  Tested and works on home field.
-	Robot::catA->portcollisInit();
+	if(Timer::GetFPGATimestamp()<startTime+3){
+		Robot::intake->intakeRotateTalon1->Set(-.45);
+		Robot::intake->intakeRotateTalon2->Set(-.45);
+		Robot::catA->portcollisInit();
+		Robot::catA->moveArm();
+		Robot::drivetrain->driveToAngle(-.65,0);
+	}
+	else if(Timer::GetFPGATimestamp()<startTime+5){
+		Robot::catA->portcollisInit();
+		Robot::catA->moveArm();
+		Robot::drivetrain->driveToAngle(-.86,0);
+	}
+	else {
+		Robot::drivetrain->driveToAngle(0,0);
+		Robot::catA->stop(); //reduce motor strain
+	}
 
 }
 void autonCommand::auton2(){
 	//chivel de frise
 	SmartDashboard::PutBoolean("Chival de Frise",true);
-	if(Timer::GetFPGATimestamp()<startTime+3){
-		Robot::drivetrain->driveToAngle(-.5,0);
+	if(Timer::GetFPGATimestamp()<startTime+5.5){
+		Robot::drivetrain->driveToAngle(-.55,0);
 		Robot::catA->portcollisLift();
 		Robot::catA->moveArm();
 	}
-	else if(Timer::GetFPGATimestamp()<startTime+.5){
-		Robot::drivetrain->driveToAngle(.5,0);
+	else if(Timer::GetFPGATimestamp()<startTime+5.95){
 		Robot::catA->portcollisInit();
 		Robot::catA->moveArm();
+		Robot::drivetrain->driveToAngle(.55,0);
 	}
-	else if(Timer::GetFPGATimestamp()<startTime+2){
-		Robot::drivetrain->driveToAngle(-.85,0);
-		Robot::catA->moveArm();
+	else if(Timer::GetFPGATimestamp()<startTime+8){
+		Robot::drivetrain->driveToAngle(-.95,0);
 	}
 	else{
 		Robot::drivetrain->driveToAngle(0,0);
@@ -131,14 +145,16 @@ void autonCommand::auton5(){
 	//low bar no shot
 
 	if(Timer::GetFPGATimestamp()<startTime+3){
+		Robot::intake->intakeRotateTalon1->Set(-.45);
+		Robot::intake->intakeRotateTalon2->Set(-.45);
 		Robot::catA->portcollisInit();
 		Robot::catA->moveArm();
-		Robot::drivetrain->driveToAngle(-.45,0);
+		Robot::drivetrain->driveToAngle(-.75,0);
 	}
 	else if(Timer::GetFPGATimestamp()<startTime+5){
 		Robot::catA->portcollisInit();
 		Robot::catA->moveArm();
-		Robot::drivetrain->driveToAngle(-.6,0);
+		Robot::drivetrain->driveToAngle(-.85,0);
 	}
 	else {
 		Robot::drivetrain->driveToAngle(0,0);
@@ -156,4 +172,6 @@ void autonCommand::auton8(){
 	if(Timer::GetFPGATimestamp()<startTime+5){
 		Robot::drivetrain->driveToAngle(-.5,0);
 	}
+	else
+		Robot::drivetrain->driveToAngle(0,0);
 }

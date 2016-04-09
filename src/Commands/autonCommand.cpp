@@ -68,7 +68,6 @@ void autonCommand::Execute() {
 		break;
 	}
 
-//	Robot::drivetrain->driveSRX3->Set(.3);
 }
 
 // Make this return true when this Command no longer needs to run execute()
@@ -88,37 +87,27 @@ void autonCommand::Interrupted() {
 }
 void autonCommand::auton1(){
 	//portcullis.  Tested and works on home field.
-//	Robot::catA->portcollisInit();
+	Robot::catA->portcollisInit();
 
-	if(Timer::GetFPGATimestamp()<startTime+3){
-		Robot::catA->portcollisInit();
-		Robot::catA->moveArm();
-		Robot::drivetrain->driveToAngle(-.65,0);
-	}
-	else if(Timer::GetFPGATimestamp()<startTime+5){
-		Robot::catA->portcollisInit();
-		Robot::catA->moveArm();
-		Robot::drivetrain->driveToAngle(-.8,0);
-	}
-
-	else {
-		Robot::drivetrain->driveToAngle(-.8,0);
-		Robot::catA->stop(); //reduce motor strain
-	}
 }
 void autonCommand::auton2(){
 	//chivel de frise
-	if(Timer::GetFPGATimestamp()<startTime+2){
+	if(Timer::GetFPGATimestamp()<startTime+3){
 		Robot::drivetrain->driveToAngle(-.5,0);
-		Robot::catA->chivelDeFrise();
 		Robot::catA->moveArm();
 	}
-	else if(Timer::GetFPGATimestamp()<startTime+5){
+	else if(Timer::GetFPGATimestamp()<startTime+.5){
+		Robot::drivetrain->driveToAngle(.5,0);
+		Robot::catA->portcollisInit();
+		Robot::catA->moveArm();
+	}
+	else if(Timer::GetFPGATimestamp()<startTime+2){
 		Robot::drivetrain->driveToAngle(-.85,0);
 		Robot::catA->moveArm();
 	}
-	else
+	else{
 		Robot::drivetrain->driveToAngle(0,0);
+	}
 }
 void autonCommand::auton3(){
 	//rough terrain.  Tested and works on home field.
@@ -138,16 +127,20 @@ void autonCommand::auton4(){
 }
 void autonCommand::auton5(){
 	//low bar no shot
-	if(Timer::GetFPGATimestamp()<startTime+2){
-		Robot::catA->lower();
-		Robot::intake->holdBall();
+
+	if(Timer::GetFPGATimestamp()<startTime+3){
+		Robot::catA->portcollisInit();
+		Robot::catA->moveArm();
+		Robot::drivetrain->driveToAngle(-.45,0);
 	}
-	else if(Timer::GetFPGATimestamp()<startTime+4){
-		Robot::catA->stop();
-		Robot::intake->intakeRotateTalon1->Set(0);
+	else if(Timer::GetFPGATimestamp()<startTime+5){
+		Robot::catA->portcollisInit();
+		Robot::catA->moveArm();
+		Robot::drivetrain->driveToAngle(-.6,0);
 	}
-	else{
-		Robot::drivetrain->driveToAngle(-.5,0);
+	else {
+		Robot::drivetrain->driveToAngle(0,0);
+		Robot::catA->stop(); //reduce motor strain
 	}
 }
 void autonCommand::auton6(){

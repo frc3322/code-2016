@@ -216,18 +216,27 @@ void Robot::TeleopPeriodic() {
 	SmartDashboard::PutNumber("encoder dist",RobotMap::intakeEncoder->GetDistance());
 	SmartDashboard::PutNumber("vel",Robot::shooter->returnVel());
 
-
+/*
+ * make sure driving works
+ * test cat. A
+ * test drive straight teleop
+ */
 	//driver controls
 	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::YBUTTON)){//
-			Robot::catA->chivelDeFrise();
-		} else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::XBUTTON)) {
-			Robot::catA->portcollisInit();
-		} else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BBUTTON)) {
-			Robot::catA->portcollisLift();
-		}
-	//drive code
+		Robot::catA->chivelDeFrise();
+	}
+	else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::XBUTTON)) {
+		Robot::catA->portcollisInit();
+	}
+	else if(Robot::oi->getdriveStick()->GetRawButton(XBOX::BBUTTON)) {
+		Robot::catA->portcollisLift();
+	}
+	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::ABUTTON)){
+		Robot::drivetrain->driveToAngle(-.8,0);
+	}
+	else{
 		Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetY(),-1*Robot::oi->getdriveStick()->GetRawAxis(4),true);
-
+	}
 	//tech controls
 
 	//manual intake control
@@ -294,8 +303,8 @@ void Robot::TeleopPeriodic() {
 	Robot::catA->moveArm();
 
 	//gearshifting
-	Robot::drivetrain->autoShift();
-}
+//	Robot::drivetrain->autoShift();
+	}
 
 
 void Robot::TestPeriodic() {

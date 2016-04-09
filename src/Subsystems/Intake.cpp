@@ -139,19 +139,17 @@ double Intake::calculatePID(double setpoint, double current, double Kp, double K
 void Intake::loadingBall(double cycleStartTime){
 	loadingball = true;
 	Robot::shooter->testPID(19);
-	if((Timer::GetFPGATimestamp()-4)>(double)cycleStartTime || 	Robot::shooter->shooterFrontTalon->GetEncVel()<-4096*19.5)
+	if((Timer::GetFPGATimestamp()-2)>(double)cycleStartTime || 	Robot::shooter->shooterFrontTalon->GetEncVel()<-4096*18.9)
 		//shooter speed needs to be checked
 	{
 		intakeSpinTalon1->Set(1);
 		intakeSpinTalon2->Set(1);
 	}
-	else if((Timer::GetFPGATimestamp()-8.5)>(double)cycleStartTime){
-		readyToShoot=true;
-		loadingball = false;
-		intakeSpinTalon1->Set(0);
-		intakeSpinTalon2->Set(0);
-		intakeRotateTalon2->Set(0);
-		Robot::shooter->stopShooter();
+	else if((Timer::GetFPGATimestamp()-15)>(double)cycleStartTime){
+		Robot::shooter->testPID(0);
+		Robot::shooter->shooterBackTalon->SetControlMode(CANTalon::ControlMode::kVoltage);
+		Robot::shooter->shooterBackTalon->Set(0);
+		Robot::intake->intakeRotateTalon2->Set(0);
 		SmartDashboard::PutNumber("thing happened! ",cycleStartTime);
 	}
 }

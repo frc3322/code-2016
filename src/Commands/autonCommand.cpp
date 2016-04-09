@@ -92,8 +92,10 @@ void autonCommand::auton1(){
 }
 void autonCommand::auton2(){
 	//chivel de frise
+	SmartDashboard::PutBoolean("Chival de Frise",true);
 	if(Timer::GetFPGATimestamp()<startTime+3){
 		Robot::drivetrain->driveToAngle(-.5,0);
+		Robot::catA->portcollisLift();
 		Robot::catA->moveArm();
 	}
 	else if(Timer::GetFPGATimestamp()<startTime+.5){

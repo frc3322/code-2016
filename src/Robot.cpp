@@ -235,6 +235,7 @@ void Robot::TeleopPeriodic() {
 		Robot::drivetrain->driveToAngle(-.8,0);
 	}
 	else{
+		Robot::ahrs->ZeroYaw();
 		Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetY(),-1*Robot::oi->getdriveStick()->GetRawAxis(4),true);
 	}
 	//tech controls

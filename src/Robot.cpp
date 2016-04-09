@@ -132,7 +132,7 @@ void Robot::AutonomousPeriodic() {
 		break;
 	case 2:
 		//chivel de frise
-		Robot::catA->chivelDeFrise();
+//		Robot::catA->chivelDeFrise();
 		break;
 	case 3:
 		//rough terrain

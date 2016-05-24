@@ -13,6 +13,7 @@
 #define DRIVETRAIN_H
 #include "Commands/Subsystem.h"
 #include "WPILib.h"
+#include <pathfinder.h>
 
 /**
  *
@@ -46,6 +47,8 @@ public:
 
 	int getVelocity(int currentGear);
 	float driveToAngle(float velocity,float targetAngle);
+
+	void waypointGenerator();
 
     double rotateToAngleRate;
     float setpoint;

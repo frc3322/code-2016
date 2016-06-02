@@ -43,7 +43,7 @@ def init_networktables(ipaddr):
 def main():
     define("webcam", default="http://raspberrypi.local:5806/?action=stream", help="URL for the webcam", type=str)
     define("webcam2", default="http://raspberrypi2.local:5803/?action=stream", help="URL for the webcam", type=str)
-    define("host", default='roborio-3322-frc.local', help="Hostname of robot", type=str)
+    define("host", default='10.33.22.2', help="Hostname of robot", type=str)
     define("port", default=3322, help="run on the given port", type=int)
 
     parse_command_line()

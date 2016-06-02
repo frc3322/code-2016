@@ -53,7 +53,7 @@ int CatA::armPos(int pos) {
 }
 
 void CatA::moveArm() {
-	if(setpoint == 176){
+	if(setpoint == 155){
 	catA2->Set(computePID(setpoint, RobotMap::pot->Get(), 0.005, 0, -4, 0)); //test PID values
 	}
 	else
@@ -70,7 +70,7 @@ void CatA::portcollisInit(){
 }
 
 void CatA::portcollisLift(){
-	setpoint = 176; //change as needed, approximated to be raised as high as possible w/out hitting robot
+	setpoint = 155; //change as needed, approximated to be raised as high as possible w/out hitting robot
 }
 
 void CatA::lower() {

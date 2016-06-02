@@ -46,7 +46,7 @@ void Robot::RobotInit() {
 
 	SmartDashboard::PutNumber("Auton Number: ",0);
 
-	//Talon SRX 15 mode bug
+	//Talon SRX 15 mode bug, oh well.
 	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();
 	Robot::intake->init();

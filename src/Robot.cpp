@@ -46,7 +46,7 @@ void Robot::RobotInit() {
 
 	SmartDashboard::PutNumber("Auton Number: ",0);
 
-	//Talon SRX 15 mode bug, oh well.
+	//Talon SRX 15 mode bug
 	Robot::drivetrain->EnableSRX();
 	Robot::shooter->initShooter();
 	Robot::intake->init();
@@ -245,7 +245,7 @@ void Robot::TeleopPeriodic() {
 	}
 	else{
 		Robot::ahrs->ZeroYaw();
-		Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetY(),-1*Robot::oi->getdriveStick()->GetRawAxis(4),true);
+		Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetY() * 0.3,-1*Robot::oi->getdriveStick()->GetRawAxis(4) * 0.3,true);
 	}
 	//tech controls
 

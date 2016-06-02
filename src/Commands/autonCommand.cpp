@@ -94,7 +94,7 @@ void autonCommand::auton1(){
 		Robot::catA->moveArm();
 		Robot::drivetrain->driveToAngle(-.65,0);
 	}
-	else if(Timer::GetFPGATimestamp()<startTime+5){
+	else if(Timer::GetFPGATimestamp()<startTime+8){
 		Robot::catA->portcollisInit();
 		Robot::catA->moveArm();
 		Robot::drivetrain->driveToAngle(-.86,0);

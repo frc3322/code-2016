@@ -144,3 +144,40 @@ double Drivetrain::calculatePID(double setpoint, double current, double Kp, doub
 	return (Kp*(setpoint-current) + f)+(iVal*Ki)+-dVal; //there used to be an f term here. maybe that's why its jittery?
 
 }
+
+void Drivetrain::waypointGenerator(){
+	int POINT_LENGTH = 3;
+	Waypoint points[POINT_LENGTH];
+
+	Waypoint p1 = {-4,-1,d2r(45)};  //Waypoint at -4,-1 with an exit angle of 45 degrees being converted into radians
+	Waypoint p2 = {-1,2,0}; //waypoint at -1,2
+	Waypoint p3 = {2,4,0};//waypoint at 2,4
+	points[0] = p1;
+	points[1] = p2;
+	points[2] = p3;
+
+	TrajectoryCandidate candidate;
+
+	// Prepare the Trajectory for Generation.
+	//
+	// Arguments:
+	// Fit Function:        FIT_HERMITE_CUBIC or FIT_HERMITE_QUINTIC
+	// Sample Count:        PATHFINDER_SAMPLES_HIGH (100 000)
+	//                      PATHFINDER_SAMPLES_LOW  (10 000)
+	//                      PATHFINDER_SAMPLES_FAST (1 000)
+	// Time Step:           0.001 Seconds
+	// Max Velocity:        15 m/s
+	// Max Acceleration:    10 m/s/s
+	// Max Jerk:            60 m/s/s/s
+
+	pathfinder_prepare(points,POINT_LENGTH, FIT_HERMITE_CUBIC, PATHFINDER_SAMPLES_HIGH, 0.001,15.0,10.0,60.0, &candidate);
+
+	int length = candidate.length;
+
+	//array of segments (trajectory points) to store the trajectory in
+	Segment *trajectory = malloc(length * sizeof(Segment));
+
+	//Generate the trajectory
+
+	pathfinder_generate(&candidate,trajectory);
+}

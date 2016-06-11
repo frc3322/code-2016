@@ -28,6 +28,7 @@ Drivetrain::Drivetrain() : Subsystem("Drivetrain") {
     driveSRX4 = RobotMap::drivetraindriveSRX4;
     driveTrain = RobotMap::drivetraindriveTrain;
 
+
 //    powerDistPanel = RobotMap::drivetrainpowerDistPanel;
 //    gearshiftRight = RobotMap::drivetraingearshiftRight;
 
@@ -146,38 +147,101 @@ double Drivetrain::calculatePID(double setpoint, double current, double Kp, doub
 }
 
 void Drivetrain::waypointGenerator(){
-	int POINT_LENGTH = 3;
-	Waypoint points[POINT_LENGTH];
-
-	Waypoint p1 = {-4,-1,d2r(45)};  //Waypoint at -4,-1 with an exit angle of 45 degrees being converted into radians
-	Waypoint p2 = {-1,2,0}; //waypoint at -1,2
-	Waypoint p3 = {2,4,0};//waypoint at 2,4
-	points[0] = p1;
-	points[1] = p2;
-	points[2] = p3;
-
-	TrajectoryCandidate candidate;
-
-	// Prepare the Trajectory for Generation.
-	//
-	// Arguments:
-	// Fit Function:        FIT_HERMITE_CUBIC or FIT_HERMITE_QUINTIC
-	// Sample Count:        PATHFINDER_SAMPLES_HIGH (100 000)
-	//                      PATHFINDER_SAMPLES_LOW  (10 000)
-	//                      PATHFINDER_SAMPLES_FAST (1 000)
-	// Time Step:           0.001 Seconds
-	// Max Velocity:        15 m/s
-	// Max Acceleration:    10 m/s/s
-	// Max Jerk:            60 m/s/s/s
-
-	pathfinder_prepare(points,POINT_LENGTH, FIT_HERMITE_CUBIC, PATHFINDER_SAMPLES_HIGH, 0.001,15.0,10.0,60.0, &candidate);
-
-	int length = candidate.length;
-
-	//array of segments (trajectory points) to store the trajectory in
-	Segment *trajectory = malloc(length * sizeof(Segment));
-
-	//Generate the trajectory
-
-	pathfinder_generate(&candidate,trajectory);
+//	int POINT_LENGTH = 3;
+//	Waypoint points[POINT_LENGTH];
+//
+//	Waypoint p1 = {-4,-1,d2r(45)};  //Waypoint at -4,-1 with an exit angle of 45 degrees being converted into radians
+//	Waypoint p2 = {-1,2,0}; //waypoint at -1,2
+//	Waypoint p3 = {2,4,0};//waypoint at 2,4
+//	points[0] = p1;
+//	points[1] = p2;
+//	points[2] = p3;
+//
+//	TrajectoryCandidate candidate;
+//
+//	// Prepare the Trajectory for Generation.
+//	//
+//	// Arguments:
+//	// Fit Function:        FIT_HERMITE_CUBIC or FIT_HERMITE_QUINTIC
+//	// Sample Count:        PATHFINDER_SAMPLES_HIGH (100 000)
+//	//                      PATHFINDER_SAMPLES_LOW  (10 000)
+//	//                      PATHFINDER_SAMPLES_FAST (1 000)
+//	// Time Step:           0.001 Seconds
+//	// Max Velocity:        15 m/s
+//	// Max Acceleration:    10 m/s/s
+//	// Max Jerk:            60 m/s/s/s
+//
+////	pathfinder_prepare(points,POINT_LENGTH, FIT_HERMITE_CUBIC, PATHFINDER_SAMPLES_HIGH, 0.001,15.0,10.0,60.0, &candidate);
+//
+//	int length = candidate.length;
+//
+//	//array of segments (trajectory points) to store the trajectory in
+////	Segment *trajectory = malloc(length * sizeof(Segment));
+//
+//	//Generate the trajectory
+//
+////	pathfinder_generate(&candidate,trajectory);
 }
+double Drivetrain::changeMagnitude(float val,float amount){
+	if(fabs(val) < amount){
+		return 0;
+	}
+	else if(val>0){
+		return val - amount;
+	}
+	else
+		return val + amount;
+}
+void Drivetrain::newdriveSystem(float f, float t, double yawRate){
+	float Kp = 2;
+	float Kd = 0; //TODO: make implementation not broken
+	float error = (t-(float)yawRate);
+	float errorRate = error - previousError;
+	const float deadband = .25;
+	errorRateArray[i] = errorRate;
+	i++;
+	if(i>9){
+		i = 0;
+	}
+	if(fabs(f) > .9 && t < .3){
+		t = 0;
+	}
+	float magnitude = sqrt(f*f + t*t);
+	if(magnitude < deadband){
+		f = 0;
+		t = 0;
+	}
+	f = Drivetrain::changeMagnitude(f,deadband) / (1-deadband);
+	t = Drivetrain::changeMagnitude(t,deadband) / (1-deadband);
+
+//	if(fabs(t) < .17){
+//		t = 0;
+//	}
+//	if(fabs(f) < .17){
+//		f = 0;
+//	}
+	previousError = error;
+	float avgErrorRate = (errorRateArray[0] + errorRateArray[1] + errorRateArray[2] + errorRateArray[3] + errorRateArray[4])/5;
+	//only using 5 of available 10
+	float RM = (f+t) + (error * Kp) + (Kd * avgErrorRate);
+	float LM = (f-t) - (error * Kp) - (Kd * avgErrorRate);
+	LM *=-1;
+	SmartDashboard::PutNumber("RM",RM);
+	SmartDashboard::PutNumber("LM",LM);
+	SmartDashboard::PutNumber("error",error);
+	if(fabs(LM)>.0005 || fabs(RM)> .0005){
+	float maxVal = std::max(fabs(RM),fabs(LM));
+	maxVal = std::max(maxVal,(float)1.0);
+		Drivetrain::driveSRX1->Set(RM/maxVal);
+		Drivetrain::driveSRX2->Set(RM/maxVal);
+		Drivetrain::driveSRX3->Set(LM/maxVal);
+		Drivetrain::driveSRX4->Set(LM/maxVal);
+	}
+	else{
+		Drivetrain::driveSRX1->Set(0);
+		Drivetrain::driveSRX2->Set(0);
+		Drivetrain::driveSRX3->Set(0);
+		Drivetrain::driveSRX4->Set(0);
+	}
+}
+

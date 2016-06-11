@@ -232,12 +232,22 @@ void Robot::TeleopPeriodic() {
 		Robot::catA->portcollisLift();
 	}
 	if(Robot::oi->getdriveStick()->GetRawButton(XBOX::ABUTTON)){
-		Robot::drivetrain->driveToAngle(-.8,0);
+		//Robot::drivetrain->driveToAngle(-.8,0);
 	}
 	else{
 		Robot::ahrs->ZeroYaw();
-		Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetY(),-1*Robot::oi->getdriveStick()->GetRawAxis(4),true);
+		//Robot::drivetrain->getDrive()->ArcadeDrive(Robot::oi->getdriveStick()->GetY(),-1*Robot::oi->getdriveStick()->GetRawAxis(4),true);
 	}
+	float f = Robot::oi->getdriveStick()->GetY(); //first joystick y axis
+	float t = Robot::oi->getdriveStick()->GetRawAxis(4); //second joystick x axis
+	double yawRate = Robot::ahrs->GetRawGyroZ() / 360.0; //scale yawRate to between -1 and 1
+	SmartDashboard::PutNumber("f",f);
+	SmartDashboard::PutNumber("t",t);
+	SmartDashboard::PutNumber("yawRate",yawRate);
+	SmartDashboard::PutNumber("raw z", Robot::ahrs->GetRawGyroZ());
+	SmartDashboard::PutBoolean("is rotating", Robot::ahrs->IsRotating());
+
+	Robot::drivetrain->newdriveSystem(f,t,yawRate);
 	//tech controls
 
 	//manual intake control
@@ -301,7 +311,7 @@ void Robot::TeleopPeriodic() {
 	}
 
 	//cat. A PID
-	Robot::catA->moveArm();
+	//Robot::catA->moveArm();
 
 	//gearshifting
 //	Robot::drivetrain->autoShift();

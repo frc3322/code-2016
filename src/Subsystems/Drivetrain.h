@@ -50,6 +50,8 @@ public:
 
 	void waypointGenerator();
 
+	void newdriveSystem(float f, float t, double yawRate);
+
     double rotateToAngleRate;
     float setpoint;
 
@@ -84,6 +86,10 @@ public:
 	double previous = 0;
 	double maxEncoder = 0;
 	double previousError = 0;
+    double errorRateArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    double previousYawRate;
+    int i = 0;
+    double changeMagnitude(float val,float amount);
 
 };
 

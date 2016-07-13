@@ -62,7 +62,8 @@ public:
 	void toggleIntakeOff();
 	void resetShoot();
 	void LogHTMLDashboardValues();
-
+	void techControls();
+	void shooterControl();
 	CameraServer returnCam();
 
 	std::shared_ptr<AHRS> ahrs;

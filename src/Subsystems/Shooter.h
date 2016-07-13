@@ -31,11 +31,14 @@ public:
 	void initShooter();
 	void stopShooter();
 	void testPID(float setpointFront);
-	int returnVel();
+	float returnVelocity();
 	float returnVoltVal();
 	float returnAmpVal();
 	void shootAuton3();
 	void killShooter();
+	void shootTeleop();
+	bool hasShot();
+	void recordVoltage();
 	std::shared_ptr<CANTalon> shooterBackTalon;
 	std::shared_ptr<Encoder> frontWheelEncoder;
 	std::shared_ptr<PIDController> frontWheelPID;

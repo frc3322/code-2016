@@ -42,6 +42,7 @@ public:
 	void setPosition(int setpoint,float p,float i,float d,float f);
 	void takeBallIn2();
 	void stopSpinner2();
+	void loadBall();
 	std::shared_ptr<CANTalon> intakeRotateTalon1;
 	std::shared_ptr<CANTalon> intakeRotateTalon2;
 	std::shared_ptr<CANTalon> intakeSpinTalon1;

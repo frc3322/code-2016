@@ -109,7 +109,8 @@ void Drivetrain::gearShift(int position) {
 		currentGear = 1;
 		RobotMap::drivetraingearshiftLeft->Set(DoubleSolenoid::kForward); //assuming kForward is high gear
 		RobotMap::drivetraingearshiftRight->Set(DoubleSolenoid::kForward);
-	} else {
+	}
+	else {
 		currentGear = 0;
 		RobotMap::drivetraingearshiftLeft->Set(DoubleSolenoid::kReverse); //assuming kBackward is low gear
 		RobotMap::drivetraingearshiftRight->Set(DoubleSolenoid::kReverse);

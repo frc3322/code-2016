@@ -236,6 +236,9 @@ void Robot::TeleopPeriodic() {
 	if(Robot::oi->gettechStick()->GetRawButton(XBOX::LBUMPER)){
 		Robot::shooter->shootTeleop();
 	}
+	if(Robot::oi->gettechStick()->GetRawButton(XBOX::BACK)){
+		Robot::shooter->EagleVisionShot();
+	}
 	if(Robot::oi->gettechStick()->GetRawButton(XBOX::RBUMPER)){
 		holdingBall = false;
 		loadingBall = false;

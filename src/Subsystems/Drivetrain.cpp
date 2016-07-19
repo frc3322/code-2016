@@ -74,6 +74,14 @@ float Drivetrain::driveToAngle(float velocity,float targetAngle){
 void Drivetrain::PIDWrite(float output){
 
 }
+void Drivetrain::correctShootingAngle(double inputAngle){
+	if(RobotMap::ahrs->GetYaw()>0){
+		driveTrain->ArcadeDrive(0,Drivetrain::calculatePID(inputAngle,-1*sqrt(RobotMap::ahrs->GetYaw()),0.3,.06,0),false);
+	}
+	else if(RobotMap::ahrs->GetYaw()<0){
+		driveTrain->ArcadeDrive(0,Drivetrain::calculatePID(inputAngle,1*sqrt(-RobotMap::ahrs->GetYaw()),0.3,.06,0),false);
+	}
+}
 
 double Drivetrain::angleToTurn(double currentAngle, double targetAngle){
 	double provisionalAngle = targetAngle-currentAngle;

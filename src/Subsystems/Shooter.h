@@ -39,6 +39,7 @@ public:
 	void shootTeleop();
 	bool hasShot();
 	void recordVoltage();
+	void EagleVisionShot();
 	std::shared_ptr<CANTalon> shooterBackTalon;
 	std::shared_ptr<Encoder> frontWheelEncoder;
 	std::shared_ptr<PIDController> frontWheelPID;

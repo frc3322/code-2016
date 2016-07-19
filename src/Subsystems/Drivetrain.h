@@ -90,6 +90,7 @@ public:
     double previousYawRate;
     int i = 0;
     double changeMagnitude(float val,float amount);
+    void correctShootingAngle(double angle);
 
 };
 

@@ -93,7 +93,7 @@ bool Shooter::hasShot(){
 	}
 	float average = sum/5;
 	if( (average - voltage[i]) > 2){
-		Robot::shooter->killShooter();
+		//Robot::shooter->killShooter();
 	}
 }
 void Shooter::recordVoltage(){
